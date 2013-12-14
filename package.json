@@ -1,0 +1,31 @@
+{
+  "name": "gulp-mocha",
+  "version": "0.0.0",
+  "description": "Run Mocha tests",
+  "license": "MIT",
+  "repository": "sindresorhus/gulp-mocha",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin"
+  ],
+  "dependencies": {
+    "event-stream": "~3.0.20",
+    "mocha": "~1.15.1"
+  },
+  "devDependencies": {
+    "gulp-util": "~2.1.3"
+  }
+}
