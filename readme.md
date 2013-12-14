@@ -2,7 +2,7 @@
 
 > Run [Mocha](http://visionmedia.github.io/mocha/) tests
 
-*Keep in mind that this is just a thin wrapper around Mocha and your issue is most likely something with Mocha itself.*
+*Keep in mind that this is just a thin wrapper around Mocha and your issue is most likely with Mocha.*
 
 
 ## Install
