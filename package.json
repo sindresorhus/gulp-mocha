@@ -19,7 +19,18 @@
     "index.js"
   ],
   "keywords": [
-    "gulpplugin"
+    "gulpplugin",
+    "mocha",
+    "test",
+    "testing",
+    "unit",
+    "framework",
+    "runner",
+    "tdd",
+    "bdd",
+    "qunit",
+    "spec",
+    "tap"
   ],
   "dependencies": {
     "event-stream": "~3.0.20",
