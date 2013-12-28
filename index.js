@@ -3,15 +3,14 @@ var es = require('event-stream');
 var Mocha = require('mocha');
 
 module.exports = function (options) {
-	return es.map(function (file, cb) {
-		var mocha = new Mocha(options);
-		mocha.addFile(file.path);
-		mocha.run(function (errCount) {
-			if (errCount) {
-				return cb(new Error(errCount + ' failing'), file);
-			}
+	var mocha = new Mocha(options);
 
-			cb(null, file);
-		});
+	return es.through(function (file) {
+		mocha.addFile(file.path);
+		this.emit('data', file);
+	}, function () {
+		mocha.run(function (errCount) {
+			this.emit('end');
+		}.bind(this));
 	});
 };

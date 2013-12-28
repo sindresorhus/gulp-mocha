@@ -7,15 +7,17 @@ var out = process.stdout.write.bind(process.stdout);
 var err = process.stderr.write.bind(process.stderr);
 
 it('should run unit test and pass', function (cb) {
+	var stream = mocha();
+
 	process.stdout.write = function (str) {
-		if (/1 passing/.test(gutil.colors.stripColor(str))) {
+		if (/1 passing/.test(str)) {
 			assert(true);
 			process.stdout.write = out;
 			cb();
 		}
 	};
-
-	mocha().write(new gutil.File({path: 'fixture-pass.js'}));
+	stream.write(new gutil.File({path: 'fixture-pass.js'}));
+	stream.end();
 });
 
 it('should run unit test and fail', function (cb) {
@@ -30,6 +32,6 @@ it('should run unit test and fail', function (cb) {
 	};
 
 	stream.on('error', function () {});
-
 	stream.write(new gutil.File({path: 'fixture-fail.js'}));
+	stream.end();
 });
