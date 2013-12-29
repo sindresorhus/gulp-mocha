@@ -11,8 +11,7 @@ module.exports = function (options) {
 	}, function () {
 		mocha.run(function (errCount) {
 			if (errCount > 0) {
-				var errMsg = errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.';
-				return this.emit('error', new Error(errMsg));
+				return this.emit('error', new Error('gulp-mocha: ' + errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
 			}
 
 			this.emit('end');
