@@ -1,6 +1,6 @@
 {
   "name": "gulp-mocha",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Run Mocha tests",
   "license": "MIT",
   "repository": "sindresorhus/gulp-mocha",
