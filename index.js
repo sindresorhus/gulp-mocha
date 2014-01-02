@@ -1,11 +1,13 @@
 'use strict';
 var es = require('event-stream');
 var Mocha = require('mocha');
+var path = require('path');
 
 module.exports = function (options) {
 	var mocha = new Mocha(options);
 
 	return es.through(function (file) {
+		delete require.cache[require.resolve(path.resolve(file.path))];
 		mocha.addFile(file.path);
 		this.emit('data', file);
 	}, function () {
