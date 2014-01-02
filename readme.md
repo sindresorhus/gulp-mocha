@@ -22,7 +22,7 @@ var mocha = require('gulp-mocha');
 
 gulp.task('default', function () {
 	gulp.src('app.js')
-		.pipe(mocha({ui: 'nyan'}));
+		.pipe(mocha({reporter: 'nyan'}));
 });
 ```
 
