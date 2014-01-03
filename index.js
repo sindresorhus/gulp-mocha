@@ -11,12 +11,16 @@ module.exports = function (options) {
 		mocha.addFile(file.path);
 		this.emit('data', file);
 	}, function () {
-		mocha.run(function (errCount) {
-			if (errCount > 0) {
-				return this.emit('error', new Error('gulp-mocha: ' + errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
-			}
+		try {
+			mocha.run(function (errCount) {
+				if (errCount > 0) {
+					return this.emit('error', new Error('gulp-mocha: ' + errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
+				}
 
-			this.emit('end');
-		}.bind(this));
+				this.emit('end');
+			}.bind(this));
+		} catch (err) {
+			this.emit('error', new Error('gulp-mocha: ' + err));
+		}
 	});
 };
