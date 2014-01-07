@@ -9,16 +9,16 @@ module.exports = function (options) {
 
 	return through(function (file) {
 		delete require.cache[require.resolve(path.resolve(file.path))];
-		mocha.addFile(file.path);
-		this.emit('data', file);
-	}, function () {
+		mocha.files = [ file.path ];
 		try {
 			mocha.run(function (errCount) {
-				if (errCount > 0) {
-					return this.emit('error', new Error('gulp-mocha: ' + errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
-				}
+				this.emit('data', file);
 
-				this.emit('end');
+				if (errCount > 0) {
+					var errWord = (errCount === 1 ? 'test' : 'tests');
+					return this.emit('error',
+						new Error(['gulp-mocha: ', errCount, errWord, 'failed.'].join(' ')));
+				}
 			}.bind(this));
 		} catch (err) {
 			this.emit('error', new Error('gulp-mocha: ' + err));
