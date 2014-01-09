@@ -34,7 +34,6 @@
   ],
   "dependencies": {
     "gulp-util": "~2.2.0",
-    "through": "~2.3.0",
     "mocha": "~1"
   }
 }
