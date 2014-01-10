@@ -1,42 +1,33 @@
 'use strict';
 var path = require('path');
-var Duplex = require('stream').Duplex;
+var Transform = require('stream').Transform;
 var gutil = require('gulp-util');
 var Mocha = require('mocha');
 
+var PLUGIN = 'gulp-mocha';
+
 module.exports = function (options) {
-	var duplex = new Duplex({objectMode: true});
-	var errorCount = 0;
+  var transform = new Transform({objectMode: true});
+  var mocha = new Mocha(options);
 
-	duplex._write = function (file, encoding, done) {
-		var mocha = new Mocha(options);
-		delete require.cache[require.resolve(path.resolve(file.path))];
-		mocha.addFile(file.path);
+  transform._transform = function (file, encoding, next) {
+    delete require.cache[require.resolve(path.resolve(file.path))];
+    mocha.addFile(file.path);
+    transform.push(file);
+    next();
+  };
 
-		try {
-			mocha.run(function (errCount) {
-				duplex.push(file);
-				errorCount += errCount;
-				done();
-			}.bind(this));
-		} catch (err) {
-			this.emit('error', err);
-			done();
-		}
-	};
+  transform.on('finish', function () {
+    try {
+      mocha.run(function (errorCount) {
+        if (errorCount !== 0) {
+          transform.emit('error', new gutil.PluginError(PLUGIN, [errorCount, (errorCount === 1 ? 'test' : 'tests'), 'failed.'].join(' ')));
+        }
+      });
+    } catch (err) {
+      transform.emit('error', new gutil.PluginError(PLUGIN, err, {showStack: true}));
+    }
+  });
 
-	duplex.on('finish', function () {
-		if (errorCount === 0) {
-			return;
-		}
-
-		var ec = errorCount;
-		errorCount = 0;
-
-		duplex.emit('error', new gutil.PluginError('gulp-mocha', [ec, (ec === 1 ? 'test' : 'tests'), 'failed.'].join(' ')));
-	});
-
-	duplex._read = function () {};
-
-	return duplex;
+  return transform;
 };
