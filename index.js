@@ -17,6 +17,10 @@ module.exports = function (options) {
 			mocha.run(function (errCount) {
 				duplex.push(file);
 				errorCount += errCount;
+				if (errorCount) {
+                    console.log('  ' + gutil.colors.red(errorCount) + ' failing');
+                    console.log();
+                }
 				done();
 			}.bind(this));
 		} catch (err) {
