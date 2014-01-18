@@ -9,7 +9,16 @@ module.exports = function (options) {
 	var errorCount = 0;
 
 	duplex._write = function (file, encoding, done) {
-		var mocha = new Mocha(options);
+		var mocha;
+
+		// Load provided modules as the same to mocha's --require
+		if (options && Array.isArray(options.require)) {
+			options.require.forEach(function (mod) {
+				require(mod);
+			});
+		}
+
+		mocha = new Mocha(options);
 		delete require.cache[require.resolve(path.resolve(file.path))];
 		mocha.addFile(file.path);
 

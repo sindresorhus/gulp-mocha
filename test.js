@@ -36,3 +36,34 @@ it('should run unit test and fail', function (cb) {
 	stream.write(new gutil.File({path: 'fixture-fail.js'}));
 	stream.end();
 });
+
+it('should run unit test written in coffee-script and pass', function (cb) {
+	var stream = mocha({ require: [ 'coffee-script' ] });
+
+	process.stdout.write = function (str) {
+		if (/1 passing/.test(str)) {
+			assert(true);
+			process.stdout.write = out;
+			cb();
+		}
+	};
+
+	stream.write(new gutil.File({path: 'fixture-pass.coffee'}));
+	stream.end();
+});
+
+it('should run unit test written in coffee-script and fail', function (cb) {
+	var stream = mocha({ require: [ 'coffee-script' ] });
+
+	process.stderr.write = function (str) {
+		if (/1 failing/.test(str)) {
+			assert(true);
+			process.stderr.write = err;
+			cb();
+		}
+	};
+
+	stream.on('error', function () {});
+	stream.write(new gutil.File({path: 'fixture-fail.coffee'}));
+	stream.end();
+});
