@@ -1,42 +1,39 @@
 'use strict';
 var path = require('path');
-var Duplex = require('stream').Duplex;
 var gutil = require('gulp-util');
+var through2 = require('through2');
 var Mocha = require('mocha');
 
 module.exports = function (options) {
-	var duplex = new Duplex({objectMode: true});
-	var errorCount = 0;
+	var errorCount = 0,
+		stream = through2.obj(
+			function (file, encoding, done) {
+				var mocha = new Mocha(options);
+				delete require.cache[require.resolve(path.resolve(file.path))];
+				mocha.addFile(file.path);
 
-	duplex._write = function (file, encoding, done) {
-		var mocha = new Mocha(options);
-		delete require.cache[require.resolve(path.resolve(file.path))];
-		mocha.addFile(file.path);
-
-		try {
-			mocha.run(function (errCount) {
-				duplex.push(file);
-				errorCount += errCount;
+				try {
+					mocha.run(function (errCount) {
+						this.push(file);
+						errorCount += errCount;
+						done();
+					}.bind(this));
+				} catch (err) {
+					this.emit('error', err);
+					done();
+				}
+			},
+			function (done) {
 				done();
-			}.bind(this));
-		} catch (err) {
-			this.emit('error', err);
-			done();
-		}
-	};
+				if (errorCount === 0) {
+					return;
+				}
 
-	duplex.on('finish', function () {
-		if (errorCount === 0) {
-			return;
-		}
+				var ec = errorCount;
+				errorCount = 0;
 
-		var ec = errorCount;
-		errorCount = 0;
+				this.emit('error', new gutil.PluginError('gulp-mocha', [ec, (ec === 1 ? 'test' : 'tests'), 'failed.'].join(' ')));
+			});
 
-		duplex.emit('error', new gutil.PluginError('gulp-mocha', [ec, (ec === 1 ? 'test' : 'tests'), 'failed.'].join(' ')));
-	});
-
-	duplex._read = function () {};
-
-	return duplex;
+	return stream;
 };
