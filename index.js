@@ -28,7 +28,6 @@ module.exports = function (options) {
 						delete require.cache[key];
 					}
 				}
-
 				cb();
 			}.bind(this));
 		} catch (err) {
