@@ -45,3 +45,4 @@ it('should call the callback for the flush method', function (cb) {
 		cb();
 	});
 });
+
