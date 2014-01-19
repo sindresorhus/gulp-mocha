@@ -14,10 +14,6 @@ module.exports = function (options) {
 	}, function (cb) {
 		try {
 			mocha.run(function (errCount) {
-				if (errCount > 0) {
-					this.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
-				}
-
 				cb();
 			}.bind(this));
 		} catch (err) {
