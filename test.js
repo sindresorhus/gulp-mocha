@@ -36,3 +36,12 @@ it('should run unit test and fail', function (cb) {
 	stream.write(new gutil.File({path: 'fixture-fail.js'}));
 	stream.end();
 });
+
+it('should call the callback for the flush method', function (cb) {
+	var stream = mocha();
+
+	stream._flush(function () {
+		assert(true);
+		cb();
+	});
+});
