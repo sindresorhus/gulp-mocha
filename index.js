@@ -34,6 +34,8 @@ module.exports = function (options) {
 		} catch (err) {
 			this.emit('error', new gutil.PluginError('gulp-mocha', err));
 			cb();
+		} finally {
+			this.emit('end');
 		}
 	});
 };
