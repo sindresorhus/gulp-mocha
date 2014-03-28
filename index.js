@@ -30,6 +30,7 @@ module.exports = function (options) {
 				}
 
 				cb();
+				process.exit(errCount);
 			}.bind(this));
 		} catch (err) {
 			this.emit('error', new gutil.PluginError('gulp-mocha', err));
