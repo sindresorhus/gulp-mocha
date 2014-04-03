@@ -1,4 +1,4 @@
-# [gulp](https://github.com/wearefractal/gulp)-mocha [![Build Status](https://secure.travis-ci.org/sindresorhus/gulp-mocha.png?branch=master)](http://travis-ci.org/sindresorhus/gulp-mocha)
+# [gulp](http://gulpjs.com)-mocha [![Build Status](https://travis-ci.org/sindresorhus/gulp-mocha.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-mocha)
 
 > Run [Mocha](http://visionmedia.github.io/mocha/) tests
 
@@ -7,14 +7,12 @@
 
 ## Install
 
-Install with [npm](https://npmjs.org/package/gulp-mocha)
-
-```
-npm install --save-dev gulp-mocha
+```bash
+$ npm install --save-dev gulp-mocha
 ```
 
 
-## Example
+## Usage
 
 ```js
 var gulp = require('gulp');
@@ -25,6 +23,7 @@ gulp.task('default', function () {
 		.pipe(mocha({reporter: 'nyan'}));
 });
 ```
+
 
 ## API
 
@@ -91,4 +90,4 @@ Only run tests matching the given pattern which is internally compiled to a RegE
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+[MIT](http://opensource.org/licenses/MIT) © [Sindre Sorhus](http://sindresorhus.com)
