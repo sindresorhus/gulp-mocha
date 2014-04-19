@@ -32,8 +32,8 @@ gulp.task('default', function () {
 
 #### options.ui
 
-Type: `String`  
-Default: `bdd`  
+Type: `String`
+Default: `bdd`
 Values: `bdd`, `tdd`, `qunit`, `exports`
 
 The interface to use.
@@ -41,8 +41,8 @@ The interface to use.
 
 #### options.reporter
 
-Type: `String`  
-Default: `dot`  
+Type: `String`
+Default: `dot`
 Values: [reporters](https://github.com/visionmedia/mocha/tree/master/lib/reporters)
 
 The reporter that will be used.
@@ -59,7 +59,7 @@ Accepted globals.
 
 #### options.timeout
 
-Type: `Number`  
+Type: `Number`
 Default: `2000`
 
 Test-case timeout in milliseconds.
@@ -67,7 +67,7 @@ Test-case timeout in milliseconds.
 
 #### options.bail
 
-Type: `Boolean`  
+Type: `Boolean`
 Default: `false`
 
 Bail on the first test failure.
@@ -75,7 +75,7 @@ Bail on the first test failure.
 
 #### options.ignoreLeaks
 
-Type: `Boolean`  
+Type: `Boolean`
 Default: `false`
 
 Ignore global leaks.
@@ -87,6 +87,19 @@ Type: `String`
 
 Only run tests matching the given pattern which is internally compiled to a RegExp.
 
+#### options.require
+
+Type: `Array`
+
+Modules to be required into the tests, usually only modules that don't need to be set to a var can be included (e.g should) but if you use requireGlobal the module will be added to the global scope of the tests.
+
+
+#### options.requireGlobals
+
+Type: `Boolean`
+Default: `false`
+
+Add required modules to the global scope.
 
 ## License
 

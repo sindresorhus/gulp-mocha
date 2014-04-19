@@ -46,3 +46,18 @@ it('should call the callback for the flush method', function (cb) {
 	});
 });
 
+
+it('can require a module and make it a global', function (cb) {
+	var stream = mocha({require: 'assert', requireGlobals: true});
+
+	process.stdout.write = function (str) {
+		if (/1 passing/.test(str)) {
+			assert(true);
+			process.stdout.write = out;
+			cb();
+		}
+	};
+
+	stream.write(new gutil.File({path: 'fixture-require.js'}));
+	stream.end();
+});
