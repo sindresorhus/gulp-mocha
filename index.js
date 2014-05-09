@@ -13,7 +13,8 @@ module.exports = function (options) {
 	}
 
 	return through2.obj(function (file, enc, cb) {
-		mocha.addFile(file.path);
+		if(!file.isNull())
+			mocha.addFile(file.path);
 		this.push(file);
 		cb();
 	}, function (cb) {
