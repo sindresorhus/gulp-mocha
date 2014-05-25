@@ -87,11 +87,9 @@ Type: `String`
 
 Only run tests matching the given pattern which is internally compiled to a RegExp.
 
-#### options.compilers
+### CoffeeScript
 
-Type: `String`
-
-CS and similar transpilers may be used by mapping the file extensions and the module name. For example `coffee:coffee-script` with CoffeeScript 1.6- or `coffee:coffee-script/register` with CoffeeScript 1.7+.
+For CoffeeScript support, add `require('coffee-script')` with CoffeeScript 1.6- or `require('coffee-script/register')` with CoffeeScript 1.7+.
 
 ## License
 
