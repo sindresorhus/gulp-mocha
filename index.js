@@ -6,11 +6,6 @@ var Mocha = require('mocha');
 
 module.exports = function (options) {
 	var mocha = new Mocha(options);
-	var cache = {};
-
-	for (var key in require.cache) {
-		cache[key] = true;
-	}
 
 	return through2.obj(function (file, enc, cb) {
 		mocha.addFile(file.path);
@@ -18,6 +13,11 @@ module.exports = function (options) {
 		cb();
 	}, function (cb) {
 		try {
+			var cache = {};
+			for (var key in require.cache) {
+				cache[key] = true;
+			}
+
 			mocha.run(function (errCount) {
 				if (errCount > 0) {
 					this.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
