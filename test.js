@@ -7,13 +7,17 @@ var through = require('through2');
 var out = process.stdout.write.bind(process.stdout);
 var err = process.stderr.write.bind(process.stderr);
 
+afterEach(function () {
+	process.stdout.write = out;
+	process.stderr.write = err;
+});
+
 it('should run unit test and pass', function (cb) {
 	var stream = mocha();
 
 	process.stdout.write = function (str) {
 		if (/1 passing/.test(str)) {
 			assert(true);
-			process.stdout.write = out;
 			cb();
 		}
 	};
@@ -28,7 +32,6 @@ it('should run unit test and fail', function (cb) {
 	process.stderr.write = function (str) {
 		if (/1 failing/.test(str)) {
 			assert(true);
-			process.stderr.write = err;
 			cb();
 		}
 	};
