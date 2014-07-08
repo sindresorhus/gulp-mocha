@@ -28,21 +28,29 @@ module.exports = function (options) {
 	}, function (cb) {
 		var stream = this;
 		var d = domain.create();
-		d.on('error', function (err) {
+
+		function handleException(e) {
 			d.dispose();
 			clearCache();
-			stream.emit('error', new gutil.PluginError('gulp-mocha', err));
+			stream.emit('error', new gutil.PluginError('gulp-mocha', e));
 			cb();
-		});
+		}
+
+		d.on('error', handleException);
 		d.run(function () {
-			mocha.run(function (errCount) {
-				d.dispose();
-				clearCache();
-				if (errCount > 0) {
-					stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
-				}
-				cb();
-			});
+			try {
+				mocha.run(function (errCount) {
+					d.dispose();
+					clearCache();
+					if (errCount > 0) {
+						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
+					}
+					cb();
+				});
+			}
+			catch (e) {
+				handleException(e);
+			}
 		});
 	});
 };
