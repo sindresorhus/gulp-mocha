@@ -103,3 +103,22 @@ it('should clear cache after mocha threw', function (done) {
 	stream.end();
 });
 
+it('should clear cache after mocha threw uncaught exception', function (done) {
+	var stream = mocha();
+
+	stream.pipe(through.obj(function (file, enc, cb) {cb();}, function (cb) {
+		for (var key in require.cache) {
+			if(/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
+				throw new Error('require cache still contained: ' + key);
+			}
+		}
+		cb();
+		done();
+	}));
+
+	stream.on('error', function () {});
+	stream.write(new gutil.File({path: 'fixture-pass.js'}));
+	stream.write(new gutil.File({path: 'fixture-throws-uncaught.js'}));
+	stream.end();
+});
+
