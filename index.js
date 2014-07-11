@@ -30,7 +30,6 @@ module.exports = function (options) {
 		var d = domain.create();
 
 		function handleException(e) {
-			d.dispose();
 			clearCache();
 			stream.emit('error', new gutil.PluginError('gulp-mocha', e));
 			cb();
@@ -40,7 +39,6 @@ module.exports = function (options) {
 		d.run(function () {
 			try {
 				mocha.run(function (errCount) {
-					d.dispose();
 					clearCache();
 					if (errCount > 0) {
 						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
