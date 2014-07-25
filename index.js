@@ -1,9 +1,8 @@
 'use strict';
-
-var gutil = require('gulp-util');
-var through2 = require('through2');
-var Mocha = require('mocha');
 var domain = require('domain');
+var gutil = require('gulp-util');
+var through = require('through2');
+var Mocha = require('mocha');
 
 module.exports = function (options) {
 	var mocha = new Mocha(options);
@@ -21,7 +20,7 @@ module.exports = function (options) {
 		}
 	}
 
-	return through2.obj(function (file, enc, cb) {
+	return through.obj(function (file, enc, cb) {
 		mocha.addFile(file.path);
 		this.push(file);
 		cb();
@@ -29,9 +28,9 @@ module.exports = function (options) {
 		var stream = this;
 		var d = domain.create();
 
-		function handleException(e) {
+		function handleException(err) {
 			clearCache();
-			stream.emit('error', new gutil.PluginError('gulp-mocha', e));
+			stream.emit('error', new gutil.PluginError('gulp-mocha', err));
 			cb();
 		}
 
@@ -40,14 +39,17 @@ module.exports = function (options) {
 			try {
 				mocha.run(function (errCount) {
 					clearCache();
+
 					if (errCount > 0) {
-						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.'));
+						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
+							showStack: false
+						}));
 					}
+
 					cb();
 				});
-			}
-			catch (e) {
-				handleException(e);
+			} catch (err) {
+				handleException(err);
 			}
 		});
 	});
