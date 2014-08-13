@@ -51,6 +51,7 @@ module.exports = function (options) {
 				});
 			} catch (err) {
 				handleException(err);
+				stream.emit('end');
 			}
 		});
 	});
