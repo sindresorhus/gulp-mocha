@@ -46,6 +46,7 @@ module.exports = function (options) {
 						}));
 					}
 
+					stream.emit('end');
 					cb();
 				});
 			} catch (err) {
