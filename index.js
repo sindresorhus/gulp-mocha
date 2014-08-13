@@ -46,10 +46,12 @@ module.exports = function (options) {
 						}));
 					}
 
+					stream.emit('end');
 					cb();
 				});
 			} catch (err) {
 				handleException(err);
+				stream.emit('end');
 			}
 		});
 	});
