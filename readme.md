@@ -7,7 +7,7 @@
 
 ## Install
 
-```bash
+```sh
 $ npm install --save-dev gulp-mocha
 ```
 
@@ -32,7 +32,7 @@ gulp.task('default', function () {
 
 #### options.ui
 
-Type: `String`  
+Type: `string`  
 Default: `bdd`  
 Values: `bdd`, `tdd`, `qunit`, `exports`
 
@@ -41,7 +41,7 @@ The interface to use.
 
 #### options.reporter
 
-Type: `String`  
+Type: `string`  
 Default: `dot`  
 Values: [reporters](https://github.com/visionmedia/mocha/tree/master/lib/reporters)
 
@@ -52,14 +52,14 @@ This option can also be used to utilize third-party reporters. For example if yo
 
 #### options.globals
 
-Type: `Array`
+Type: `array`
 
 Accepted globals.
 
 
 #### options.timeout
 
-Type: `Number`  
+Type: `number`  
 Default: `2000`
 
 Test-case timeout in milliseconds.
@@ -67,7 +67,7 @@ Test-case timeout in milliseconds.
 
 #### options.bail
 
-Type: `Boolean`  
+Type: `boolean`  
 Default: `false`
 
 Bail on the first test failure.
@@ -75,7 +75,7 @@ Bail on the first test failure.
 
 #### options.ignoreLeaks
 
-Type: `Boolean`  
+Type: `boolean`  
 Default: `false`
 
 Ignore global leaks.
@@ -83,14 +83,16 @@ Ignore global leaks.
 
 #### options.grep
 
-Type: `String`
+Type: `string`
 
 Only run tests matching the given pattern which is internally compiled to a RegExp.
 
-### CoffeeScript
+
+## CoffeeScript
 
 For CoffeeScript support, add `require('coffee-script')` with CoffeeScript 1.6- or `require('coffee-script/register')` with CoffeeScript 1.7+.
 
+
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](http://sindresorhus.com)

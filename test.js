@@ -1,8 +1,8 @@
 'use strict';
 var assert = require('assert');
 var gutil = require('gulp-util');
-var mocha = require('./index');
 var through = require('through2');
+var mocha = require('./');
 
 var out = process.stdout.write.bind(process.stdout);
 var err = process.stderr.write.bind(process.stderr);

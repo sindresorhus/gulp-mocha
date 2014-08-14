@@ -22,8 +22,7 @@ module.exports = function (options) {
 
 	return through.obj(function (file, enc, cb) {
 		mocha.addFile(file.path);
-		this.push(file);
-		cb();
+		cb(null, file);
 	}, function (cb) {
 		var stream = this;
 		var d = domain.create();
