@@ -53,12 +53,15 @@ it('should call the callback for the flush method', function (cb) {
 it('should clear cache after successful run', function (done) {
 	var stream = mocha();
 
-	stream.pipe(through.obj(function (file, enc, cb) {cb();}, function (cb) {
+	stream.pipe(through.obj(function (file, enc, cb) {
+		cb();
+	}, function (cb) {
 		for (var key in require.cache) {
-			if(/fixture-pass/.test(key.toString())) {
+			if (/fixture-pass/.test(key.toString())) {
 				throw new Error('require cache still contained: ' + key);
 			}
 		}
+
 		done();
 	}));
 
@@ -69,12 +72,15 @@ it('should clear cache after successful run', function (done) {
 it('should clear cache after failing run', function (done) {
 	var stream = mocha();
 
-	stream.pipe(through.obj(function (file, enc, cb) {cb();}, function (cb) {
+	stream.pipe(through.obj(function (file, enc, cb) {
+		cb();
+	}, function (cb) {
 		for (var key in require.cache) {
-			if(/fixture-fail/.test(key.toString())) {
+			if (/fixture-fail/.test(key.toString())) {
 				throw new Error('require cache still contained: ' + key);
 			}
 		}
+
 		cb();
 		done();
 	}));
@@ -87,12 +93,15 @@ it('should clear cache after failing run', function (done) {
 it('should clear cache after mocha threw', function (done) {
 	var stream = mocha();
 
-	stream.pipe(through.obj(function (file, enc, cb) {cb();}, function (cb) {
+	stream.pipe(through.obj(function (file, enc, cb) {
+		cb();
+	}, function (cb) {
 		for (var key in require.cache) {
-			if(/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
+			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
 				throw new Error('require cache still contained: ' + key);
 			}
 		}
+
 		cb();
 		done();
 	}));
@@ -106,12 +115,15 @@ it('should clear cache after mocha threw', function (done) {
 it('should clear cache after mocha threw uncaught exception', function (done) {
 	var stream = mocha();
 
-	stream.pipe(through.obj(function (file, enc, cb) {cb();}, function (cb) {
+	stream.pipe(through.obj(function (file, enc, cb) {
+		cb();
+	}, function (cb) {
 		for (var key in require.cache) {
-			if(/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
+			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
 				throw new Error('require cache still contained: ' + key);
 			}
 		}
+
 		cb();
 		done();
 	}));
@@ -121,4 +133,3 @@ it('should clear cache after mocha threw uncaught exception', function (done) {
 	stream.write(new gutil.File({path: 'fixture-throws-uncaught.js'}));
 	stream.end();
 });
-
