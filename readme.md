@@ -42,7 +42,7 @@ The interface to use.
 #### options.reporter
 
 Type: `string`  
-Default: `dot`  
+Default: `spec` | `dot` prior to mocha v1.21.0  
 Values: [reporters](https://github.com/visionmedia/mocha/tree/master/lib/reporters)
 
 The reporter that will be used.
