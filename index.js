@@ -20,8 +20,10 @@ module.exports = function (options) {
 		}
 	}
 
+	var hasTests = false;
 	return through(function (file) {
 		mocha.addFile(file.path);
+		hasTests = true;
 		this.queue(file);
 	}, function () {
 		var stream = this;
@@ -35,16 +37,21 @@ module.exports = function (options) {
 		d.on('error', handleException);
 		d.run(function () {
 			try {
-				mocha.run(function (errCount) {
+				var runner = mocha.run(function (errCount) {
 					clearCache();
 
 					if (errCount > 0) {
 						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
 							showStack: false
 						}));
-					} else {
+					} else if (!hasTests) {
 						stream.emit('end');
 					}
+				});
+
+				runner.on('end', function () {
+					clearCache();
+					stream.emit('end');
 				});
 			} catch (err) {
 				handleException(err);
