@@ -1,7 +1,7 @@
 'use strict';
 var domain = require('domain');
 var gutil = require('gulp-util');
-var through = require('through2');
+var through = require('through');
 var Mocha = require('mocha');
 
 module.exports = function (options) {
@@ -20,17 +20,16 @@ module.exports = function (options) {
 		}
 	}
 
-	return through.obj(function (file, enc, cb) {
+	return through(function (file) {
 		mocha.addFile(file.path);
-		cb(null, file);
-	}, function (cb) {
+		this.queue(file);
+	}, function () {
 		var stream = this;
 		var d = domain.create();
 
 		function handleException(err) {
 			clearCache();
 			stream.emit('error', new gutil.PluginError('gulp-mocha', err));
-			cb();
 		}
 
 		d.on('error', handleException);
@@ -43,9 +42,9 @@ module.exports = function (options) {
 						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
 							showStack: false
 						}));
+					} else {
+						stream.emit('end');
 					}
-
-					cb();
 				});
 			} catch (err) {
 				handleException(err);
