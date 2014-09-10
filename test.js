@@ -56,7 +56,7 @@ it('should clear cache after successful run', function (done) {
 	stream.on('end', function () {
 		for (var key in require.cache) {
 			if (/fixture-pass/.test(key.toString())) {
-				throw new Error('require cache still contained: ' + key);
+				return done(new Error('require cache still contained: ' + key));
 			}
 		}
 		done();
@@ -71,7 +71,7 @@ it('should clear cache after failing run', function (done) {
 	stream.on('error', function () {
 		for (var key in require.cache) {
 			if (/fixture-fail/.test(key.toString())) {
-				throw new Error('require cache still contained: ' + key);
+				return done(new Error('require cache still contained: ' + key));
 			}
 		}
 		done();
@@ -86,7 +86,7 @@ it('should clear cache after mocha threw', function (done) {
 	stream.on('error', function () {
 		for (var key in require.cache) {
 			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
-				throw new Error('require cache still contained: ' + key);
+				return done(new Error('require cache still contained: ' + key));
 			}
 		}
 		done();
@@ -102,7 +102,7 @@ it('should clear cache after mocha threw uncaught exception', function (done) {
 	stream.on('error', function () {
 			for (var key in require.cache) {
 				if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
-					throw new Error('require cache still contained: ' + key);
+					return done(new Error('require cache still contained: ' + key));
 				}
 			}
 			done();
