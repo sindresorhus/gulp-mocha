@@ -28,16 +28,21 @@ module.exports = function (options) {
 	}, function () {
 		var stream = this;
 		var d = domain.create();
+		var runner;
 
 		function handleException(err) {
-			clearCache();
-			stream.emit('error', new gutil.PluginError('gulp-mocha', err));
+			if (err.name === 'AssertionError' && runner) {
+				runner.uncaught(err);
+			} else {
+				clearCache();
+				stream.emit('error', new gutil.PluginError('gulp-mocha', err));
+			}
 		}
 
 		d.on('error', handleException);
 		d.run(function () {
 			try {
-				var runner = mocha.run(function (errCount) {
+				runner = mocha.run(function (errCount) {
 					clearCache();
 
 					if (errCount > 0) {

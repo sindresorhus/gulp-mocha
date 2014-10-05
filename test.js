@@ -36,14 +36,14 @@ it('should run unit test and fail', function (cb) {
 		}
 	};
 
-	stream.on('error', function () {});
+	stream.once('error', function () {});
 	stream.write(new gutil.File({path: 'fixture-fail.js'}));
 	stream.end();
 });
 
 it('should call the callback right after end', function (cb) {
 	var stream = mocha();
-	stream.on('end', function () {
+	stream.once('end', function () {
 		assert(true);
 		cb();
 	});
@@ -53,7 +53,7 @@ it('should call the callback right after end', function (cb) {
 it('should clear cache after successful run', function (done) {
 	var stream = mocha();
 
-	stream.on('end', function () {
+	stream.once('end', function () {
 		for (var key in require.cache) {
 			if (/fixture-pass/.test(key.toString())) {
 				return done(new Error('require cache still contained: ' + key));
@@ -68,7 +68,7 @@ it('should clear cache after successful run', function (done) {
 
 it('should clear cache after failing run', function (done) {
 	var stream = mocha();
-	stream.on('error', function () {
+	stream.once('error', function () {
 		for (var key in require.cache) {
 			if (/fixture-fail/.test(key.toString())) {
 				return done(new Error('require cache still contained: ' + key));
@@ -83,7 +83,7 @@ it('should clear cache after failing run', function (done) {
 it('should clear cache after mocha threw', function (done) {
 	var stream = mocha();
 
-	stream.on('error', function () {
+	stream.once('error', function () {
 		for (var key in require.cache) {
 			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
 				return done(new Error('require cache still contained: ' + key));
@@ -99,7 +99,7 @@ it('should clear cache after mocha threw', function (done) {
 it('should clear cache after mocha threw uncaught exception', function (done) {
 	var stream = mocha();
 
-	stream.on('error', function () {
+	stream.once('error', function () {
 			for (var key in require.cache) {
 				if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
 					return done(new Error('require cache still contained: ' + key));
@@ -109,5 +109,21 @@ it('should clear cache after mocha threw uncaught exception', function (done) {
 	});
 	stream.write(new gutil.File({path: 'fixture-pass.js'}));
 	stream.write(new gutil.File({path: 'fixture-throws-uncaught.js'}));
+	stream.end();
+});
+
+it('should pass async AssertionError to mocha', function (done) {
+	var stream = mocha();
+
+	process.stderr.write = function (str) {
+		if (/throws after timeout/.test(str)) {
+			done(new Error('mocha timeout not expected'));
+		} else if (/Uncaught AssertionError: false == true/.test(str)) {
+			done();
+		}
+	};
+
+	stream.once('error', function() { });
+	stream.write(new gutil.File({path: 'fixture-async.js'}));
 	stream.end();
 });
