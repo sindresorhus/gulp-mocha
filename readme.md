@@ -54,7 +54,7 @@ This option can also be used to utilize third-party reporters. For example if yo
 
 Type: `array`
 
-Accepted globals.
+List of accepted global variable names, example `['YUI']`. See [Mocha globals option](https://visionmedia.github.io/mocha/#globals-option).
 
 
 #### options.timeout
