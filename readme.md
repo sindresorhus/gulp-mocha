@@ -1,6 +1,6 @@
 # [gulp](http://gulpjs.com)-mocha [![Build Status](https://travis-ci.org/sindresorhus/gulp-mocha.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-mocha)
 
-> Run [Mocha](http://visionmedia.github.io/mocha/) tests
+> Run [Mocha](https://github.com/mochajs/mocha/) tests
 
 *Keep in mind that this is just a thin wrapper around Mocha and your issue is most likely with Mocha.*
 
