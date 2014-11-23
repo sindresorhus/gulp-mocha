@@ -43,7 +43,7 @@ The interface to use.
 
 Type: `string`  
 Default: `spec` | `dot` prior to mocha v1.21.0  
-Values: [reporters](https://github.com/visionmedia/mocha/tree/master/lib/reporters)
+Values: [reporters](https://github.com/mochajs/mocha/tree/master/lib/reporters)
 
 The reporter that will be used.
 
@@ -54,7 +54,7 @@ This option can also be used to utilize third-party reporters. For example if yo
 
 Type: `array`
 
-List of accepted global variable names, example `['YUI']`. See [Mocha globals option](https://visionmedia.github.io/mocha/#globals-option).
+List of accepted global variable names, example `['YUI']`. Accepts wildcards to match multiple global variables, e.g. `['gulp*']` or even `['*']`. See [Mocha globals option](http://mochajs.org/#globals-option).
 
 
 #### options.timeout
