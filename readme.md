@@ -23,7 +23,16 @@ gulp.task('default', function () {
 		.pipe(mocha({reporter: 'nyan'}));
 });
 ```
-
+**Note** If you're noticing that your test suite is not terminating. This may be caused if your test suite initializes database connections. You may add a call to `process.exit()` like so
+```js
+gulp.task('default', function () {
+	return gulp.src('test.js')
+		.pipe(mocha())
+		.once('end', function () {
+ 			process.exit();
+ 		});
+});
+```
 
 ## API
 
