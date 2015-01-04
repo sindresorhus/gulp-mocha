@@ -1,4 +1,4 @@
-# [gulp](http://gulpjs.com)-mocha [![Build Status](https://travis-ci.org/sindresorhus/gulp-mocha.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-mocha)
+# gulp-mocha [![Build Status](https://travis-ci.org/sindresorhus/gulp-mocha.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-mocha)
 
 > Run [Mocha](https://github.com/mochajs/mocha/) tests
 
@@ -23,16 +23,7 @@ gulp.task('default', function () {
 		.pipe(mocha({reporter: 'nyan'}));
 });
 ```
-**Note** If you're noticing that your test suite is not terminating. This may be caused if your test suite initializes database connections. You may add a call to `process.exit()` like so
-```js
-gulp.task('default', function () {
-	return gulp.src('test.js')
-		.pipe(mocha())
-		.once('end', function () {
- 			process.exit();
- 		});
-});
-```
+
 
 ## API
 
@@ -97,7 +88,23 @@ Type: `string`
 Only run tests matching the given pattern which is internally compiled to a RegExp.
 
 
-## CoffeeScript
+## FAQ
+
+### Test suite not exiting
+
+If your test suite is not exiting it might be because you still have a lingering callback, most often caused by an open database connection. You should close this connection or do the following:
+
+```js
+gulp.task('default', function () {
+	return gulp.src('test.js')
+		.pipe(mocha())
+		.once('end', function () {
+ 			process.exit();
+ 		});
+});
+```
+
+### CoffeeScript
 
 For CoffeeScript support, add `require('coffee-script')` with CoffeeScript 1.6- or `require('coffee-script/register')` with CoffeeScript 1.7+.
 
