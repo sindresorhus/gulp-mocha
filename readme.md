@@ -98,9 +98,12 @@ If your test suite is not exiting it might be because you still have a lingering
 gulp.task('default', function () {
 	return gulp.src('test.js')
 		.pipe(mocha())
+		.once('error', function () {
+			process.exit(1);
+		})
 		.once('end', function () {
- 			process.exit();
- 		});
+			process.exit();
+		});
 });
 ```
 
