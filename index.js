@@ -49,13 +49,8 @@ module.exports = function (options) {
 						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
 							showStack: false
 						}));
-					} else if (!hasTests) {
-						stream.emit('end');
 					}
-				});
 
-				runner.on('end', function () {
-					clearCache();
 					stream.emit('end');
 				});
 			} catch (err) {
