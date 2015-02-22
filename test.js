@@ -29,7 +29,7 @@ it('should run unit test and pass', function (cb) {
 it('should run unit test and fail', function (cb) {
 	var stream = mocha();
 
-	process.stderr.write = function (str) {
+	process.stdout.write = function (str) {
 		if (/1 failing/.test(str)) {
 			assert(true);
 			cb();
@@ -115,7 +115,7 @@ it('should clear cache after mocha threw uncaught exception', function (done) {
 it('should pass async AssertionError to mocha', function (done) {
 	var stream = mocha();
 
-	process.stderr.write = function (str) {
+	process.stdout.write = function (str) {
 		if (/throws after timeout/.test(str)) {
 			done(new Error('mocha timeout not expected'));
 		} else if (/Uncaught AssertionError: false == true/.test(str)) {
