@@ -36,6 +36,7 @@ module.exports = function (options) {
 			} else {
 				clearCache();
 				stream.emit('error', new gutil.PluginError('gulp-mocha', err, {stack: err.stack, showStack: true}));
+				stream.emit('end');
 			}
 		}
 
