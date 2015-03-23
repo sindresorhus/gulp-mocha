@@ -127,3 +127,16 @@ it('should pass async AssertionError to mocha', function (done) {
 	stream.write(new gutil.File({path: 'fixture-async.js'}));
 	stream.end();
 });
+
+it('should emit end after mocha threw', function (done) {
+	var stream = mocha();
+	var threw = false;
+	stream.once('error', function () {
+		threw = true;
+	}).once('end', function () {
+		assert(threw);
+		done();
+	});
+	stream.write(new gutil.File({path: 'fixture-throws.js'}));
+	stream.end();
+});
