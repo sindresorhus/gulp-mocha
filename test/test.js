@@ -2,7 +2,7 @@
 'use strict';
 var assert = require('assert');
 var gutil = require('gulp-util');
-var mocha = require('./');
+var mocha = require('../');
 
 var out = process.stdout.write.bind(process.stdout);
 var err = process.stderr.write.bind(process.stderr);
@@ -22,7 +22,7 @@ it('should run unit test and pass', function (cb) {
 		}
 	};
 
-	stream.write(new gutil.File({path: 'fixture-pass.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
 	stream.end();
 });
 
@@ -37,7 +37,7 @@ it('should run unit test and fail', function (cb) {
 	};
 
 	stream.once('error', function () {});
-	stream.write(new gutil.File({path: 'fixture-fail.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
 	stream.end();
 });
 
@@ -62,7 +62,7 @@ it('should clear cache after successful run', function (done) {
 		done();
 	});
 
-	stream.write(new gutil.File({path: 'fixture-pass.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
 	stream.end();
 });
 
@@ -76,7 +76,7 @@ it('should clear cache after failing run', function (done) {
 		}
 		done();
 	});
-	stream.write(new gutil.File({path: 'fixture-fail.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
 	stream.end();
 });
 
@@ -91,8 +91,8 @@ it('should clear cache after mocha threw', function (done) {
 		}
 		done();
 	});
-	stream.write(new gutil.File({path: 'fixture-pass.js'}));
-	stream.write(new gutil.File({path: 'fixture-throws.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-throws.js'}));
 	stream.end();
 });
 
@@ -107,8 +107,8 @@ it('should clear cache after mocha threw uncaught exception', function (done) {
 			}
 			done();
 	});
-	stream.write(new gutil.File({path: 'fixture-pass.js'}));
-	stream.write(new gutil.File({path: 'fixture-throws-uncaught.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-throws-uncaught.js'}));
 	stream.end();
 });
 
@@ -124,6 +124,6 @@ it('should pass async AssertionError to mocha', function (done) {
 	};
 
 	stream.once('error', function() { });
-	stream.write(new gutil.File({path: 'fixture-async.js'}));
+	stream.write(new gutil.File({path: './test/fixtures/fixture-async.js'}));
 	stream.end();
 });
