@@ -4,9 +4,10 @@ var gutil = require('gulp-util');
 var through = require('through');
 var Mocha = require('mocha');
 
-module.exports = function (options) {
-	var mocha = new Mocha(options);
+module.exports = function (opts) {
+	var mocha = new Mocha(opts);
 	var cache = {};
+	var hasTests = false;
 
 	for (var key in require.cache) {
 		cache[key] = true;
@@ -20,7 +21,6 @@ module.exports = function (options) {
 		}
 	}
 
-	var hasTests = false;
 	return through(function (file) {
 		mocha.addFile(file.path);
 		hasTests = true;
@@ -35,7 +35,10 @@ module.exports = function (options) {
 				runner.uncaught(err);
 			} else {
 				clearCache();
-				stream.emit('error', new gutil.PluginError('gulp-mocha', err, {stack: err.stack, showStack: true}));
+				stream.emit('error', new gutil.PluginError('gulp-mocha', err, {
+					stack: err.stack,
+					showStack: true
+				}));
 			}
 		}
 

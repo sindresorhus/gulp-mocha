@@ -123,7 +123,7 @@ it('should pass async AssertionError to mocha', function (done) {
 		}
 	};
 
-	stream.once('error', function() { });
+	stream.once('error', function () {});
 	stream.write(new gutil.File({path: './test/fixtures/fixture-async.js'}));
 	stream.end();
 });
