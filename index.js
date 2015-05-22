@@ -5,6 +5,8 @@ var through = require('through');
 var Mocha = require('mocha');
 
 module.exports = function (opts) {
+	opts = opts || {};
+
 	var mocha = new Mocha(opts);
 	var cache = {};
 	var hasTests = false;
@@ -19,6 +21,10 @@ module.exports = function (opts) {
 				delete require.cache[key];
 			}
 		}
+	}
+
+	if (opts.require && opts.require.length) {
+		opts.require.forEach(require);
 	}
 
 	return through(function (file) {

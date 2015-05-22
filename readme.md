@@ -83,6 +83,12 @@ Type: `string`
 
 Only run tests matching the given pattern which is internally compiled to a RegExp.
 
+##### require
+
+Type: `array`
+
+Require custom modules before tests are run.
+
 
 ## FAQ
 
