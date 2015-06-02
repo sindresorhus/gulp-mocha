@@ -17,7 +17,7 @@ module.exports = function (opts) {
 
 	function clearCache() {
 		for (var key in require.cache) {
-			if (!cache[key] && !key.match(/.*\.node$/)) {
+			if (!cache[key] && !/\.node$/.test(key)) {
 				delete require.cache[key];
 			}
 		}
