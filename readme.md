@@ -34,16 +34,16 @@ gulp.task('default', function () {
 
 ##### ui
 
-Type: `string`  
-Default: `bdd`  
+Type: `string`
+Default: `bdd`
 Values: `bdd`, `tdd`, `qunit`, `exports`
 
 The interface to use.
 
 ##### reporter
 
-Type: `string`  
-Default: `spec` | `dot` prior to mocha v1.21.0  
+Type: `string`
+Default: `spec` | `dot` prior to mocha v1.21.0
 Values: [reporters](https://github.com/mochajs/mocha/tree/master/lib/reporters)
 
 The reporter that will be used.
@@ -58,21 +58,21 @@ List of accepted global variable names, example `['YUI']`. Accepts wildcards to 
 
 ##### timeout
 
-Type: `number`  
+Type: `number`
 Default: `2000`
 
 Test-case timeout in milliseconds.
 
 ##### bail
 
-Type: `boolean`  
+Type: `boolean`
 Default: `false`
 
 Bail on the first test failure.
 
 ##### ignoreLeaks
 
-Type: `boolean`  
+Type: `boolean`
 Default: `false`
 
 Ignore global leaks.
@@ -85,9 +85,25 @@ Only run tests matching the given pattern which is internally compiled to a RegE
 
 ##### require
 
-Type: `array`
+Type: Either a single file/function or an Array of files/functions
 
-Require custom modules before tests are run.
+Require custom modules globally before tests are run.
+
+E.g.
+
+```js
+gulp.task('default', function () {
+	return gulp.src('test.js')
+		.pipe(mocha({
+			require: [
+				'coffee-script/register',
+				'./globals.js',
+				function(){ expect = require('chai').expect },
+				function(){ testVar2='other-stuff'; }
+			]
+		}));
+});
+```
 
 
 ## FAQ
