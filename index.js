@@ -23,8 +23,21 @@ module.exports = function (opts) {
 		}
 	}
 
-	if (opts.require && opts.require.length) {
-		opts.require.forEach(require);
+	if (opts.require) {
+		var mods = opts.require instanceof Array ? opts.require : [opts.require];
+
+		mods.forEach(function (mod) {
+			if (typeof mod === 'string') {
+				var abs = exists(mod) || exists(mod + '.js');
+
+				if (abs) {
+					mod = resolve(mod);
+				}
+				require(mod);
+			} else if (typeof mod === 'function') {
+				mod();
+			}
+		});
 	}
 
 	return through(function (file) {
