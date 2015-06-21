@@ -9,7 +9,6 @@ module.exports = function (opts) {
 
 	var mocha = new Mocha(opts);
 	var cache = {};
-	var hasTests = false;
 
 	for (var key in require.cache) {
 		cache[key] = true;
@@ -29,10 +28,9 @@ module.exports = function (opts) {
 
 	return through(function (file) {
 		mocha.addFile(file.path);
-		hasTests = true;
 		this.queue(file);
 	}, function () {
-		var stream = this;
+		var self = this;
 		var d = domain.create();
 		var runner;
 
@@ -41,7 +39,7 @@ module.exports = function (opts) {
 				runner.uncaught(err);
 			} else {
 				clearCache();
-				stream.emit('error', new gutil.PluginError('gulp-mocha', err, {
+				self.emit('error', new gutil.PluginError('gulp-mocha', err, {
 					stack: err.stack,
 					showStack: true
 				}));
@@ -55,12 +53,12 @@ module.exports = function (opts) {
 					clearCache();
 
 					if (errCount > 0) {
-						stream.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
+						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
 							showStack: false
 						}));
 					}
 
-					stream.emit('end');
+					self.emit('end');
 				});
 			} catch (err) {
 				handleException(err);
