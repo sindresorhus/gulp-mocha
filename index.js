@@ -3,6 +3,7 @@ var domain = require('domain');
 var gutil = require('gulp-util');
 var through = require('through');
 var Mocha = require('mocha');
+var plur = require('plur');
 
 module.exports = function (opts) {
 	opts = opts || {};
@@ -53,7 +54,7 @@ module.exports = function (opts) {
 					clearCache();
 
 					if (errCount > 0) {
-						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + (errCount === 1 ? 'test' : 'tests') + ' failed.', {
+						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + plur('test', errCount) + ' failed.', {
 							showStack: false
 						}));
 					}
