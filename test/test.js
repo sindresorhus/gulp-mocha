@@ -43,10 +43,12 @@ it('should run unit test and fail', function (cb) {
 
 it('should call the callback right after end', function (cb) {
 	var stream = mocha();
+
 	stream.once('end', function () {
 		assert(true);
 		cb();
 	});
+
 	stream.end();
 });
 
@@ -56,9 +58,11 @@ it('should clear cache after successful run', function (done) {
 	stream.once('end', function () {
 		for (var key in require.cache) {
 			if (/fixture-pass/.test(key.toString())) {
-				return done(new Error('require cache still contained: ' + key));
+				done(new Error('require cache still contained: ' + key));
+				return;
 			}
 		}
+
 		done();
 	});
 
@@ -68,14 +72,18 @@ it('should clear cache after successful run', function (done) {
 
 it('should clear cache after failing run', function (done) {
 	var stream = mocha();
+
 	stream.once('error', function () {
 		for (var key in require.cache) {
 			if (/fixture-fail/.test(key.toString())) {
-				return done(new Error('require cache still contained: ' + key));
+				done(new Error('require cache still contained: ' + key));
+				return;
 			}
 		}
+
 		done();
 	});
+
 	stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
 	stream.end();
 });
@@ -86,9 +94,11 @@ it('should clear cache after mocha threw', function (done) {
 	stream.once('error', function () {
 		for (var key in require.cache) {
 			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
-				return done(new Error('require cache still contained: ' + key));
+				done(new Error('require cache still contained: ' + key));
+				return;
 			}
 		}
+
 		done();
 	});
 	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
@@ -100,12 +110,14 @@ it('should clear cache after mocha threw uncaught exception', function (done) {
 	var stream = mocha();
 
 	stream.once('error', function () {
-			for (var key in require.cache) {
-				if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
-					return done(new Error('require cache still contained: ' + key));
-				}
+		for (var key in require.cache) {
+			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
+				done(new Error('require cache still contained: ' + key));
+				return;
 			}
-			done();
+		}
+
+		done();
 	});
 	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
 	stream.write(new gutil.File({path: './test/fixtures/fixture-throws-uncaught.js'}));
