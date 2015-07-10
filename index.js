@@ -4,6 +4,7 @@ var gutil = require('gulp-util');
 var through = require('through');
 var Mocha = require('mocha');
 var plur = require('plur');
+var resolveFrom = require('resolve-from');
 
 module.exports = function (opts) {
 	opts = opts || {};
@@ -23,8 +24,10 @@ module.exports = function (opts) {
 		}
 	}
 
-	if (opts.require && opts.require.length) {
-		opts.require.forEach(require);
+	if (Array.isArray(opts.require) && opts.require.length) {
+		opts.require.forEach(function (x) {
+			require(resolveFrom(process.cwd(), x));
+		});
 	}
 
 	return through(function (file) {
