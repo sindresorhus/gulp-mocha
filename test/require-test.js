@@ -4,12 +4,13 @@ var mocha = require('../');
 var fs = require('fs');
 var assert = require('assert');
 
-var tempFile, filePrefix = './';
+var tempFile
+const filePrefix = './';
 
 function removeFile(file) {
-  if (file && fs.existsSync(file)) { 
+  try {
     fs.unlinkSync(file); 
-  };
+  } catch(err) {}
 }
 
 beforeEach(function(){
@@ -25,12 +26,9 @@ afterEach(function(){
 
 it('should fail when trying to require a file that doesn\'t exist', function() {
   removeFile(tempFile);
-  try {
+  assert.throws(function() {
     mocha({ require: [filePrefix + tempFileBaseName]});
-    assert(false);
-  } catch (err) {
-    assert(true);
-  }
+  });
 })
 
 it('should be able to import js-files in cwd', function() {
@@ -38,10 +36,7 @@ it('should be able to import js-files in cwd', function() {
 });
 
 it('should fail when not having the ./ file prefix', function(){
-  try {
-    mocha({require: [tempFileBaseName]});
-    assert(false);
-  } catch(err) {
-    assert(true);
-  }
+  assert.throws(function() {
+    mocha({require: [tempFileBaseName]}) 
+  });
 });
