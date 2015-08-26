@@ -37,6 +37,18 @@ module.exports = function (opts) {
 		var self = this;
 		var d = domain.create();
 		var runner;
+		var events = ['start', 'end', 'suite', 'suite end', 'test', 'test end', 'hook', 'hook end',
+									'pass', 'fail', 'pending' ];
+
+		function attachEventListeners(runner) {
+			var obj = Object.keys(opts);
+				for (var prop in obj) {
+					var method = obj[prop];
+					if (events.indexOf(method) > -1) {
+						runner.on(method, opts[method]);
+					}
+				}
+		}
 
 		function handleException(err) {
 			if (err.name === 'AssertionError' && runner) {
@@ -64,6 +76,9 @@ module.exports = function (opts) {
 
 					self.emit('end');
 				});
+
+				attachEventListeners(runner);
+
 			} catch (err) {
 				handleException(err);
 			}
