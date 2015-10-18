@@ -25,6 +25,11 @@ gulp.task('default', function () {
 });
 ```
 
+> If you are writing a watch task to run your tests as you modify your `.js` files, be aware that you might run
+into issues. This plugin runs your mocha tests within the same process as your watch task and state isn't reset
+between runs. If your tests eventually fail within the watch task but pass when run in a standalone task or with
+`mocha test`, then you need to use the [`gulp-spawn-mocha`](https://github.com/KenPowers/gulp-spawn-mocha) plugin.
+
 
 ## API
 
