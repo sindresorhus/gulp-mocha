@@ -39,7 +39,7 @@ module.exports = function (opts) {
 		var runner;
 
 		function handleException(err) {
-			if (err.name === 'AssertionError' && runner) {
+			if (runner) {
 				runner.uncaught(err);
 			} else {
 				clearCache();
