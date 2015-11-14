@@ -35,7 +35,7 @@
   "dependencies": {
     "gulp-util": "^3.0.0",
     "mocha": "^2.0.1",
-    "plur": "^1.0.0",
+    "plur": "^2.1.0",
     "resolve-from": "^1.0.0",
     "temp": "^0.8.3",
     "through": "^2.3.4"
