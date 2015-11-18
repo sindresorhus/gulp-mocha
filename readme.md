@@ -15,10 +15,10 @@ $ npm install --save-dev gulp-mocha
 ## Usage
 
 ```js
-var gulp = require('gulp');
-var mocha = require('gulp-mocha');
+const gulp = require('gulp');
+const mocha = require('gulp-mocha');
 
-gulp.task('default', function () {
+gulp.task('default', () => {
 	return gulp.src('test.js', {read: false})
 		// gulp-mocha needs filepaths so you can't have any plugins before it
 		.pipe(mocha({reporter: 'nyan'}));
@@ -97,25 +97,22 @@ Require custom modules before tests are run.
 If your test suite is not exiting it might be because you still have a lingering callback, most often caused by an open database connection. You should close this connection or do the following:
 
 ```js
-gulp.task('default', function () {
+gulp.task('default', () => {
 	return gulp.src('test.js')
 		.pipe(mocha())
-		.once('error', function () {
+		.once('error', () => {
 			process.exit(1);
 		})
-		.once('end', function () {
+		.once('end', () => {
 			process.exit();
 		});
 });
 ```
 
-### CoffeeScript
-
-Add `require('coffee-script/register')` to the top of your `gulpfile.js`.
-
 ### Babel
 
-Add `require('babel/register')` to the top of your `gulpfile.js`.
+Add `require('babel-core/register');` to the top of your `gulpfile.js`. Make sure to read the [Babel docs](https://babeljs.io/docs/usage/require/).
+
 
 ## License
 
