@@ -4,7 +4,7 @@ var gutil = require('gulp-util');
 var through = require('through');
 var Mocha = require('mocha');
 var plur = require('plur');
-var resolveFrom = require('resolve-from');
+var reqCwd = require('req-cwd');
 
 module.exports = function (opts) {
 	opts = opts || {};
@@ -26,7 +26,7 @@ module.exports = function (opts) {
 
 	if (Array.isArray(opts.require) && opts.require.length) {
 		opts.require.forEach(function (x) {
-			require(resolveFrom(process.cwd(), x));
+			reqCwd(x);
 		});
 	}
 
