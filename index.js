@@ -19,6 +19,16 @@ module.exports = function (opts) {
 	function clearCache() {
 		for (var key in require.cache) {
 			if (!cache[key] && !/\.node$/.test(key)) {
+				// Remove this module from the child references that our parent may have
+				var toDelete = require.cache[key];
+				if (toDelete && toDelete.parent && toDelete.parent.children) {
+					var parentIndex = toDelete.parent.children.indexOf(toDelete);
+					if (parentIndex >= 0) {
+						toDelete.parent.children.splice(parentIndex, 1);
+					}
+				}
+
+				// Remove from the global cache
 				delete require.cache[key];
 			}
 		}
