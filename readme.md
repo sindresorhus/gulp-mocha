@@ -19,8 +19,7 @@ const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 
 gulp.task('default', () => {
-	return gulp.src('test.js', {read: false})
-		// gulp-mocha needs filepaths so you can't have any plugins before it
+	return gulp.src('test.js')
 		.pipe(mocha({reporter: 'nyan'}));
 });
 ```
