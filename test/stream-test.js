@@ -16,7 +16,6 @@ it('should run unit test by stream and error', function (cb) {
 	var stream = mocha();
 
 	stream.on('error', function (err) {
-		console.log(err);
 		if (/Streaming not supported/.test(err.message)) {
 			assert(true);
 			cb();

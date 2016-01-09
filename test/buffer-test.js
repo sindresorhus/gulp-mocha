@@ -44,7 +44,9 @@ it('should run unit test written by es2015 and sytax error', function (cb) {
 
 it('should run unit test written by es2015 and pass with babel', function (cb) {
 	babelFile('./test/fixtures/fixture-pass-es2015.js', function (file) {
-		var stream = mocha();
+		var stream = mocha({
+			timeout: 10000
+		});
 
 		process.stdout.write = function (str) {
 			err(str);
