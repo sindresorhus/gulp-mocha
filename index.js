@@ -5,6 +5,7 @@ var through = require('through');
 var Mocha = require('mocha');
 var plur = require('plur');
 var reqCwd = require('req-cwd');
+var requireFromString = require('require-from-string');
 
 module.exports = function (opts) {
 	opts = opts || {};
@@ -31,8 +32,26 @@ module.exports = function (opts) {
 	}
 
 	return through(function (file) {
-		mocha.addFile(file.path);
-		this.queue(file);
+		var self = this;
+		if (file.isNull()) {
+			mocha.addFile(file.path);
+			this.queue(file);
+		} else if (file.isBuffer()) {
+			try {
+				mocha.suite.emit('pre-require', global, file.path, mocha);
+				var f = requireFromString(file.contents.toString('utf-8'), file.path);
+				mocha.suite.emit('require', f, file.path, mocha);
+				mocha.suite.emit('post-require', global, file.path, mocha);
+				this.queue(file);
+			} catch (err) {
+				self.emit('error', new gutil.PluginError('gulp-mocha', err, {
+					stack: err.stack,
+					showStack: true
+				}));
+			}
+		} else if (file.isStream()) {
+			this.emit('error', new gutil.PluginError('gulp-mocha',  'Streaming not supported'));
+		}
 	}, function () {
 		var self = this;
 		var d = domain.create();
