@@ -3,6 +3,7 @@
 var assert = require('assert');
 var gutil = require('gulp-util');
 var mocha = require('../');
+var fs = require('fs');
 
 var out = process.stdout.write.bind(process.stdout);
 var err = process.stderr.write.bind(process.stderr);
@@ -139,3 +140,56 @@ it('should pass async AssertionError to mocha', function (done) {
 	stream.write(new gutil.File({path: './test/fixtures/fixture-async.js'}));
 	stream.end();
 });
+
+it('should run unit and pass with bufferd contents', function (cb) {
+	var stream = mocha();
+
+	process.stdout.write = function (str) {
+		err(str);
+		if (/1 passing/.test(str)) {
+			assert(true);
+			cb();
+		}
+	};
+
+	stream.write(new gutil.File({
+		path: gutil.replaceExtension('./test/fixtures/fixture-pass.js', 'dummy'),
+		contents: fs.readFileSync('./test/fixtures/fixture-pass.js')
+	}));
+	stream.end();
+});
+
+it('should run unit and fail with bufferd contents', function (cb) {
+	var stream = mocha();
+
+	process.stdout.write = function (str) {
+		if (/1 failing/.test(str)) {
+			assert(true);
+			cb();
+		}
+	};
+
+	stream.once('error', function () {});
+	stream.write(new gutil.File({
+		path: gutil.replaceExtension('./test/fixtures/fixture-fail.js', 'dummy'),
+		contents: fs.readFileSync('./test/fixtures/fixture-fail.js')
+	}));
+	stream.end();
+});
+
+it('should fail with streaming input', function (cb) {
+	var stream = mocha();
+
+	stream.on('error', function (err) {
+		if (/Streaming not supported/.test(err.message)) {
+			assert(true);
+			cb();
+		}
+	});
+
+	var s = new require('stream').Readable();
+
+	stream.write(new gutil.File({contents: s}));
+	stream.end();
+});
+
