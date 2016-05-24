@@ -6,6 +6,8 @@ var Mocha = require('mocha');
 var plur = require('plur');
 var reqCwd = require('req-cwd');
 
+var runImmediate = global.setImmediate || process.nextTick;
+
 module.exports = function (opts) {
 	opts = opts || {};
 
@@ -54,15 +56,19 @@ module.exports = function (opts) {
 		d.run(function () {
 			try {
 				runner = mocha.run(function (errCount) {
-					clearCache();
+					// Run asynchronously so that any emitted errors are not caught
+					// by mocha and transformed into a test failure.
+					runImmediate(function () {
+						clearCache();
 
-					if (errCount > 0) {
-						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + plur('test', errCount) + ' failed.', {
-							showStack: false
-						}));
-					}
+						if (errCount > 0) {
+							self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + plur('test', errCount) + ' failed.', {
+								showStack: false
+							}));
+						}
 
-					self.emit('end');
+						self.emit('end');
+					});
 				});
 			} catch (err) {
 				handleException(err);
