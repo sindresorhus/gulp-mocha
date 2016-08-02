@@ -1,6 +1,6 @@
 # gulp-mocha [![Build Status](https://travis-ci.org/sindresorhus/gulp-mocha.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-mocha)
 
-> Run [Mocha](https://github.com/mochajs/mocha/) tests
+> Run [Mocha](https://github.com/mochajs/mocha) tests
 
 *Keep in mind that this is just a thin wrapper around Mocha and your issue is most likely with Mocha.*
 
@@ -20,17 +20,14 @@ $ npm install --save-dev gulp-mocha
 const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 
-gulp.task('default', () => {
-	return gulp.src('test.js', {read: false})
+gulp.task('default', () => 
+	gulp.src('test.js', {read: false})
 		// gulp-mocha needs filepaths so you can't have any plugins before it
-		.pipe(mocha({reporter: 'nyan'}));
-});
+		.pipe(mocha({reporter: 'nyan'}))
+);
 ```
 
-> If you are writing a watch task to run your tests as you modify your `.js` files, be aware that you might run
-into issues. This plugin runs your mocha tests within the same process as your watch task and state isn't reset
-between runs. If your tests eventually fail within the watch task but pass when run in a standalone task or with
-`mocha test`, then you need to use the [`gulp-spawn-mocha`](https://github.com/KenPowers/gulp-spawn-mocha) plugin.
+> If you are writing a watch task to run your tests as you modify your `.js` files, be aware that you might run into issues. This plugin runs your Mocha tests within the same process as your watch task and state isn't reset between runs. If your tests eventually fail within the watch task but pass when run in a standalone task or with `mocha test`, then you need to use the [`gulp-spawn-mocha`](https://github.com/KenPowers/gulp-spawn-mocha) plugin.
 
 
 ## API
@@ -41,45 +38,45 @@ between runs. If your tests eventually fail within the watch task but pass when 
 
 ##### ui
 
-Type: `string`  
-Default: `bdd`  
-Values: `bdd`, `tdd`, `qunit`, `exports`
+Type: `string`<br>
+Default: `bdd`<br>
+Values: `bdd` `tdd` `qunit` `exports`
 
-The interface to use.
+Interface to use.
 
 ##### reporter
 
-Type: `string`  
-Default: `spec` | `dot` prior to mocha v1.21.0  
-Values: [reporters](https://github.com/mochajs/mocha/tree/master/lib/reporters)
+Type: `string`<br>
+Default: `spec`
+Values: [Reporters](https://github.com/mochajs/mocha/tree/master/lib/reporters)
 
-The reporter that will be used.
+Reporter that will be used.
 
-This option can also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you can then do use `mocha-lcov-reporter` as value.
+This option can also be used to utilize third-party reporters. For example, if you `npm install mocha-lcov-reporter` you can then do use `mocha-lcov-reporter` as value.
 
 ##### globals
 
-Type: `array`
+Type: `Array`
 
 List of accepted global variable names, example `['YUI']`. Accepts wildcards to match multiple global variables, e.g. `['gulp*']` or even `['*']`. See [Mocha globals option](http://mochajs.org/#globals-option).
 
 ##### timeout
 
-Type: `number`  
+Type: `number`<br>
 Default: `2000`
 
 Test-case timeout in milliseconds.
 
 ##### bail
 
-Type: `boolean`  
+Type: `boolean`<br>
 Default: `false`
 
 Bail on the first test failure.
 
 ##### ignoreLeaks
 
-Type: `boolean`  
+Type: `boolean`<br>
 Default: `false`
 
 Ignore global leaks.
@@ -92,7 +89,7 @@ Only run tests matching the given pattern which is internally compiled to a RegE
 
 ##### require
 
-Type: `array`
+Type: `Array`
 
 Require custom modules before tests are run.
 
@@ -104,16 +101,16 @@ Require custom modules before tests are run.
 If your test suite is not exiting it might be because you still have a lingering callback, most often caused by an open database connection. You should close this connection or do the following:
 
 ```js
-gulp.task('default', () => {
-	return gulp.src('test.js')
+gulp.task('default', () => 
+	gulp.src('test.js')
 		.pipe(mocha())
 		.once('error', () => {
 			process.exit(1);
 		})
 		.once('end', () => {
 			process.exit();
-		});
-});
+		})
+);
 ```
 
 ### Babel
@@ -123,4 +120,4 @@ Add `require('babel-core/register');` to the top of your `gulpfile.js`. Make sur
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)

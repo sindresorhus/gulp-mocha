@@ -1,5 +1,5 @@
 'use strict';
-var domain = require('domain');
+var domain = require('domain'); // eslint-disable-line no-restricted-modules
 var gutil = require('gulp-util');
 var through = require('through');
 var Mocha = require('mocha');
@@ -12,7 +12,7 @@ module.exports = function (opts) {
 	var mocha = new Mocha(opts);
 	var cache = {};
 
-	for (var key in require.cache) {
+	for (var key in require.cache) { // eslint-disable-line guard-for-in
 		cache[key] = true;
 	}
 
