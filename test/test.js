@@ -1,8 +1,11 @@
 'use strict';
 var assert = require('assert');
+var domain = require('domain');
+var through = require('through');
 var gutil = require('gulp-util');
 var mocha = require('../');
 
+var runImmediate = global.setImmediate || process.nextTick;
 var out = process.stdout.write.bind(process.stdout);
 var err = process.stderr.write.bind(process.stderr);
 
@@ -26,18 +29,40 @@ it('should run unit test and pass', function (cb) {
 });
 
 it('should run unit test and fail', function (cb) {
-	var stream = mocha();
+	var str = '';
 
-	process.stdout.write = function (str) {
-		if (/1 failing/.test(str)) {
-			assert(true);
-			cb();
-		}
+	process.stdout.write = function (buf) {
+		str += buf;
 	};
 
-	stream.once('error', function () {});
-	stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
-	stream.end();
+	function runAssertions() {
+		assert(/1 failing/.test(str));
+		assert(!/after all/.test(str));
+	}
+
+	// Create a new domain to escape the mocha error handling
+	domain.create().once('error', function () {
+		// Async to wait for full mocha output
+		runImmediate(function () {
+			runAssertions();
+			cb();
+		});
+	}).run(function () {
+		var stream = mocha();
+
+		stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
+		stream.end();
+		stream.once('error', function () {
+			// Async to wait for full mocha output
+			runImmediate(function () {
+				runAssertions();
+			});
+		});
+
+		// Weird stream interaction bug with mocha error handling only
+		// manifests after a pipe with no error handler.
+		stream.pipe(through());
+	});
 });
 
 it('should call the callback right after end', function (cb) {
