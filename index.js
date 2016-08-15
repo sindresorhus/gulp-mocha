@@ -7,7 +7,7 @@ var plur = require('plur');
 var reqCwd = require('req-cwd');
 
 module.exports = function (opts) {
-	opts = opts || {};
+	opts = require('./lib/MochaOptsReader.js').getOpts(opts);
 
 	var mocha = new Mocha(opts);
 	var cache = {};

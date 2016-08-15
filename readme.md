@@ -99,6 +99,13 @@ Type: `Array`
 
 Require custom modules before tests are run.
 
+##### opts
+
+Type: `string`
+Default: `test/mocha.opts`
+
+Path to Mocha opts file.
+**The only options used are those described before**. Any option set will override the corresponding one in the `opts` file. 
 
 ## FAQ
 
