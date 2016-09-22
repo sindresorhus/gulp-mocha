@@ -60,6 +60,8 @@ module.exports = function (opts) {
 						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + plur('test', errCount) + ' failed.', {
 							showStack: false
 						}));
+					} else {
+						self.emit('pass');
 					}
 
 					self.emit('end');

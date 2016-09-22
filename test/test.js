@@ -51,6 +51,17 @@ it('should call the callback right after end', function (cb) {
 	stream.end();
 });
 
+it('should call the callback when passed', function (cb) {
+	var stream = mocha();
+
+	stream.once('pass', function () {
+		assert(true);
+		cb();
+	});
+
+	stream.end();
+});
+
 it('should clear cache after successful run', function (done) {
 	var stream = mocha();
 
