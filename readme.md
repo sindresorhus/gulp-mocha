@@ -123,6 +123,9 @@ gulp.task('default', () =>
 
 Add `require('babel-core/register');` to the top of your `gulpfile.js`. Make sure to read the [Babel docs](https://babeljs.io/docs/usage/require/).
 
+### Babel
+
+Add `require('babel/register')` to the top of your `gulpfile.js`.
 
 ## License
 
