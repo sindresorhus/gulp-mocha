@@ -68,5 +68,6 @@ module.exports = function (opts) {
 				handleException(err);
 			}
 		});
+		d.dispose();
 	});
 };
