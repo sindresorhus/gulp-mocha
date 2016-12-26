@@ -34,7 +34,7 @@
   ],
   "dependencies": {
     "gulp-util": "^3.0.0",
-    "mocha": "^3.0.0",
+    "mocha": "^3.2.0",
     "plur": "^2.1.0",
     "req-cwd": "^1.0.1",
     "temp": "^0.8.3",
