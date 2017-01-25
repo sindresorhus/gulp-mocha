@@ -27,7 +27,7 @@ const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 
 gulp.task('default', () => 
-	gulp.src('test.js', {read: false})
+	return gulp.src('test.js', {read: false})
 		// gulp-mocha needs filepaths so you can't have any plugins before it
 		.pipe(mocha({reporter: 'nyan'}))
 );
@@ -108,7 +108,7 @@ If your test suite is not exiting it might be because you still have a lingering
 
 ```js
 gulp.task('default', () => 
-	gulp.src('test.js')
+	return gulp.src('test.js')
 		.pipe(mocha())
 		.once('error', () => {
 			process.exit(1);
