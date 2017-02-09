@@ -1,72 +1,54 @@
+/* eslint-disable padded-blocks */
 'use strict';
-var domain = require('domain'); // eslint-disable-line no-restricted-modules
-var gutil = require('gulp-util');
-var through = require('through');
-var Mocha = require('mocha');
-var plur = require('plur');
-var reqCwd = require('req-cwd');
 
-module.exports = function (opts) {
-	opts = opts || {};
+const dargs = require('dargs');
+const execa = require('execa');
+const gutil = require('gulp-util');
+const through = require('through2');
 
-	var mocha = new Mocha(opts);
-	var cache = {};
+module.exports = options => {
 
-	for (var key in require.cache) { // eslint-disable-line guard-for-in
-		cache[key] = true;
-	}
+  let suppress = false;
 
-	function clearCache() {
-		for (var key in require.cache) {
-			if (!cache[key] && !/\.node$/.test(key)) {
-				delete require.cache[key];
-			}
-		}
-	}
+  options = Object.assign({colors: true}, options || {});
 
-	if (Array.isArray(opts.require) && opts.require.length) {
-		opts.require.forEach(function (x) {
-			reqCwd(x);
-		});
-	}
+  if (options.suppress) {
+    suppress = true;
+    delete options.suppress;
+  }
 
-	return through(function (file) {
-		mocha.addFile(file.path);
-		this.queue(file);
-	}, function () {
-		var self = this;
-		var d = domain.create();
-		var runner;
+  const args = dargs(options);
+  const files = [];
 
-		function handleException(err) {
-			if (runner) {
-				runner.uncaught(err);
-			} else {
-				clearCache();
-				self.emit('error', new gutil.PluginError('gulp-mocha', err, {
-					stack: err.stack,
-					showStack: true
-				}));
-			}
-		}
+  function aggregate (file, encoding, done) {
+    if (file.isNull()) {
+      return done(null, file);
+    }
 
-		d.on('error', handleException);
-		d.run(function () {
-			try {
-				runner = mocha.run(function (errCount) {
-					clearCache();
+    if (file.isStream()) {
+      return done(new gutil.PluginError('gulp-mocha', 'Streaming not supported'));
+    }
 
-					if (errCount > 0) {
-						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + plur('test', errCount) + ' failed.', {
-							showStack: false
-						}));
-					}
+    files.push(file.path);
 
-					self.emit('end');
-				});
-			} catch (err) {
-				handleException(err);
-			}
-		});
-	});
+    return done();
+  }
+
+  function flush (done) {
+    execa('mocha', files.concat(args))
+      .then(result => {
+        if (!suppress) {
+          process.stdout.write(result.stdout);
+        }
+
+        this.emit('result', result);
+        done();
+      })
+      .catch(err => {
+        this.emit('error', new gutil.PluginError('gulp-mocha', err));
+        done();
+      });
+  }
+
+  return through.obj(aggregate, flush);
 };

@@ -1,140 +1,56 @@
+/* eslint-disable padded-blocks */
 'use strict';
-var assert = require('assert');
-var gutil = require('gulp-util');
-var mocha = require('../');
 
-var out = process.stdout.write.bind(process.stdout);
-var err = process.stderr.write.bind(process.stderr);
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const gutil = require('gulp-util');
+const mocha = require('../');
 
-afterEach(function () {
-	process.stdout.write = out;
-	process.stderr.write = err;
-});
+function fixture (name) {
+  let fileName = path.join(__dirname, 'fixtures', name);
 
-it('should run unit test and pass', function (cb) {
-	var stream = mocha();
+  return new gutil.File({
+    path: fileName,
+    contents: fs.existsSync(fileName) ? fs.readFileSync(fileName) : null
+  });
+}
 
-	process.stdout.write = function (str) {
-		if (/1 passing/.test(str)) {
-			assert(true);
-			cb();
-		}
-	};
+describe('mocha()', () => {
 
-	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
-	stream.end();
-});
+  it('should run unit test and pass', done => {
+    let stream = mocha({suppress: true});
 
-it('should run unit test and fail', function (cb) {
-	var stream = mocha();
+    stream.once('result', result => {
+      assert(/1 passing/.test(result.stdout));
+      done();
+    });
+    stream.write(fixture('fixture-pass.js'));
+    stream.end();
+  });
 
-	process.stdout.write = function (str) {
-		if (/1 failing/.test(str)) {
-			assert(true);
-			cb();
-		}
-	};
+  it('should run unit test and fail', done => {
+    let stream = mocha({suppress: true});
 
-	stream.once('error', function () {});
-	stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
-	stream.end();
-});
+    stream.once('error', function (err) {
+      assert(/1 failing/.test(err.stdout));
+      done();
+    });
+    stream.write(fixture('fixture-fail.js'));
+    stream.end();
+  });
 
-it('should call the callback right after end', function (cb) {
-	var stream = mocha();
+  it('should pass async AssertionError to mocha', function (done) {
+    let stream = mocha({suppress: true});
 
-	stream.once('end', function () {
-		assert(true);
-		cb();
-	});
+    stream.once('error', function (err) {
+      let throws = /throws after timeout/.test(err.stdout);
+      let uncaught = /Uncaught AssertionError: false == true/.test(err.stdout);
 
-	stream.end();
-});
-
-it('should clear cache after successful run', function (done) {
-	var stream = mocha();
-
-	stream.once('end', function () {
-		for (var key in require.cache) {
-			if (/fixture-pass/.test(key.toString())) {
-				done(new Error('require cache still contained: ' + key));
-				return;
-			}
-		}
-
-		done();
-	});
-
-	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
-	stream.end();
-});
-
-it('should clear cache after failing run', function (done) {
-	var stream = mocha();
-
-	stream.once('error', function () {
-		for (var key in require.cache) {
-			if (/fixture-fail/.test(key.toString())) {
-				done(new Error('require cache still contained: ' + key));
-				return;
-			}
-		}
-
-		done();
-	});
-
-	stream.write(new gutil.File({path: './test/fixtures/fixture-fail.js'}));
-	stream.end();
-});
-
-it('should clear cache after mocha threw', function (done) {
-	var stream = mocha();
-
-	stream.once('error', function () {
-		for (var key in require.cache) {
-			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
-				done(new Error('require cache still contained: ' + key));
-				return;
-			}
-		}
-
-		done();
-	});
-	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
-	stream.write(new gutil.File({path: './test/fixtures/fixture-throws.js'}));
-	stream.end();
-});
-
-it('should clear cache after mocha threw uncaught exception', function (done) {
-	var stream = mocha();
-
-	stream.once('error', function () {
-		for (var key in require.cache) {
-			if (/fixture-pass/.test(key.toString()) || /fixture-throws/.test(key.toString())) {
-				done(new Error('require cache still contained: ' + key));
-				return;
-			}
-		}
-
-		done();
-	});
-	stream.write(new gutil.File({path: './test/fixtures/fixture-pass.js'}));
-	stream.write(new gutil.File({path: './test/fixtures/fixture-throws-uncaught.js'}));
-	stream.end();
-});
-
-it('should pass async AssertionError to mocha', function (done) {
-	var stream = mocha();
-
-	process.stdout.write = function (str) {
-		if (/throws after timeout/.test(str)) {
-			done(new Error('mocha timeout not expected'));
-		} else if (/Uncaught AssertionError: false == true/.test(str)) {
-			done();
-		}
-	};
-
-	stream.once('error', function () {});
-	stream.write(new gutil.File({path: './test/fixtures/fixture-async.js'}));
-	stream.end();
+      assert(throws || uncaught);
+      done();
+    });
+    stream.write(fixture('fixture-async.js'));
+    stream.end();
+  });
 });
