@@ -1,4 +1,3 @@
-/* eslint-disable padded-blocks */
 'use strict';
 
 const dargs = require('dargs');
@@ -7,20 +6,22 @@ const gutil = require('gulp-util');
 const through = require('through2');
 
 module.exports = options => {
+  const defaults = {colors: true, suppress: false};
 
-  let suppress = false;
+  options = Object.assign(defaults, options);
 
-  options = Object.assign({colors: true}, options || {});
-
-  if (options.suppress) {
-    suppress = true;
-    delete options.suppress;
+  if (Object.prototype.toString.call(options.globals) === '[object Array]') {
+    // typically wouldn't modify passed options, but mocha requires a comma-
+    // separated list of names, http://mochajs.org/#globals-names, whereas dargs
+    // will treat arrays differently.
+    options.globals = options.globals.join(',');
   }
 
-  const args = dargs(options);
+  // exposing args for testing
+  const args = dargs(options, {excludes: ['suppress'], ignoreFalse: true});
   const files = [];
 
-  function aggregate (file, encoding, done) {
+  function aggregate(file, encoding, done) {
     if (file.isNull()) {
       return done(null, file);
     }
@@ -34,10 +35,10 @@ module.exports = options => {
     return done();
   }
 
-  function flush (done) {
+  function flush(done) {
     execa('mocha', files.concat(args))
       .then(result => {
-        if (!suppress) {
+        if (!options.suppress) {
           process.stdout.write(result.stdout);
         }
 

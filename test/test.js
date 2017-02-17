@@ -1,4 +1,3 @@
-/* eslint-disable padded-blocks */
 'use strict';
 
 const assert = require('assert');
@@ -7,7 +6,7 @@ const path = require('path');
 const gutil = require('gulp-util');
 const mocha = require('../');
 
-function fixture (name) {
+function fixture(name) {
   let fileName = path.join(__dirname, 'fixtures', name);
 
   return new gutil.File({
@@ -17,7 +16,6 @@ function fixture (name) {
 }
 
 describe('mocha()', () => {
-
   it('should run unit test and pass', done => {
     let stream = mocha({suppress: true});
 
@@ -51,6 +49,17 @@ describe('mocha()', () => {
       done();
     });
     stream.write(fixture('fixture-async.js'));
+    stream.end();
+  });
+
+  it('should not suppress output', done => {
+    let stream = mocha();
+
+    stream.once('result', result => {
+      assert(/should pass/.test(result.stdout));
+      done();
+    });
+    stream.write(fixture('fixture-pass.js'));
     stream.end();
   });
 });
