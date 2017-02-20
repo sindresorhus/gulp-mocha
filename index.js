@@ -23,11 +23,6 @@ module.exports = opts => {
 	const files = [];
 
 	function aggregate(file, encoding, done) {
-		if (file.isNull()) {
-			done(null, file);
-			return;
-		}
-
 		if (file.isStream()) {
 			done(new gutil.PluginError('gulp-mocha', 'Streaming not supported'));
 			return;
