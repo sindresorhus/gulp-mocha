@@ -23,7 +23,7 @@ module.exports = opts => {
 	const files = [];
 
 	function aggregate(file, encoding, done) {
-		if (file.isNull()) {
+		if (file === null) {
 			done(null, file);
 			return;
 		}
