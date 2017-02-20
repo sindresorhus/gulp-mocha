@@ -1,72 +1,55 @@
 'use strict';
-var domain = require('domain'); // eslint-disable-line no-restricted-modules
-var gutil = require('gulp-util');
-var through = require('through');
-var Mocha = require('mocha');
-var plur = require('plur');
-var reqCwd = require('req-cwd');
 
-module.exports = function (opts) {
-	opts = opts || {};
+const dargs = require('dargs');
+const execa = require('execa');
+const gutil = require('gulp-util');
+const through = require('through2');
 
-	var mocha = new Mocha(opts);
-	var cache = {};
+module.exports = options => {
+  const defaults = {colors: true, suppress: false};
 
-	for (var key in require.cache) { // eslint-disable-line guard-for-in
-		cache[key] = true;
-	}
+  options = Object.assign(defaults, options);
 
-	function clearCache() {
-		for (var key in require.cache) {
-			if (!cache[key] && !/\.node$/.test(key)) {
-				delete require.cache[key];
-			}
-		}
-	}
+  if (Object.prototype.toString.call(options.globals) === '[object Array]') {
+    // typically wouldn't modify passed options, but mocha requires a comma-
+    // separated list of names, http://mochajs.org/#globals-names, whereas dargs
+    // will treat arrays differently.
+    options.globals = options.globals.join(',');
+  }
 
-	if (Array.isArray(opts.require) && opts.require.length) {
-		opts.require.forEach(function (x) {
-			reqCwd(x);
-		});
-	}
+  // exposing args for testing
+  const args = dargs(options, {excludes: ['suppress'], ignoreFalse: true});
+  const files = [];
 
-	return through(function (file) {
-		mocha.addFile(file.path);
-		this.queue(file);
-	}, function () {
-		var self = this;
-		var d = domain.create();
-		var runner;
+  function aggregate(file, encoding, done) {
+    if (file.isNull()) {
+      return done(null, file);
+    }
 
-		function handleException(err) {
-			if (runner) {
-				runner.uncaught(err);
-			} else {
-				clearCache();
-				self.emit('error', new gutil.PluginError('gulp-mocha', err, {
-					stack: err.stack,
-					showStack: true
-				}));
-			}
-		}
+    if (file.isStream()) {
+      return done(new gutil.PluginError('gulp-mocha', 'Streaming not supported'));
+    }
 
-		d.on('error', handleException);
-		d.run(function () {
-			try {
-				runner = mocha.run(function (errCount) {
-					clearCache();
+    files.push(file.path);
 
-					if (errCount > 0) {
-						self.emit('error', new gutil.PluginError('gulp-mocha', errCount + ' ' + plur('test', errCount) + ' failed.', {
-							showStack: false
-						}));
-					}
+    return done();
+  }
 
-					self.emit('end');
-				});
-			} catch (err) {
-				handleException(err);
-			}
-		});
-	});
+  function flush(done) {
+    execa('mocha', files.concat(args))
+      .then(result => {
+        if (!options.suppress) {
+          process.stdout.write(result.stdout);
+        }
+
+        this.emit('result', result);
+        done();
+      })
+      .catch(err => {
+        this.emit('error', new gutil.PluginError('gulp-mocha', err));
+        done();
+      });
+  }
+
+  return through.obj(aggregate, flush);
 };

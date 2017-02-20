@@ -10,7 +10,7 @@
     "url": "sindresorhus.com"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "xo && mocha"
@@ -33,12 +33,11 @@
     "tap"
   ],
   "dependencies": {
+    "dargs": "^5.1.0",
+    "execa": "^0.6.0",
     "gulp-util": "^3.0.0",
     "mocha": "^3.0.0",
-    "plur": "^2.1.0",
-    "req-cwd": "^1.0.1",
-    "temp": "^0.8.3",
-    "through": "^2.3.4"
+    "through2": "^2.0.3"
   },
   "devDependencies": {
     "xo": "*"
@@ -47,6 +46,7 @@
     "envs": [
       "node",
       "mocha"
-    ]
+    ],
+    "space": true
   }
 }

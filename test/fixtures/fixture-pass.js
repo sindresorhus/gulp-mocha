@@ -2,5 +2,5 @@
 var assert = require('assert');
 
 it('should pass', function () {
-	assert(true);
+  assert(true);
 });
