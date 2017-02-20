@@ -1,6 +1,6 @@
 'use strict';
-var assert = require('assert');
+const assert = require('assert');
 
-it('should fail', function () {
-  assert(false);
+it('should fail', () => {
+	assert(false);
 });

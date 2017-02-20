@@ -1,55 +1,60 @@
 'use strict';
-
 const dargs = require('dargs');
 const execa = require('execa');
 const gutil = require('gulp-util');
 const through = require('through2');
 
-module.exports = options => {
-  const defaults = {colors: true, suppress: false};
+module.exports = opts => {
+	opts = Object.assign({
+		colors: true,
+		suppress: false
+	}, opts);
 
-  options = Object.assign(defaults, options);
+	if (Array.isArray(opts.globals)) {
+		// `globals` option should end up as a comma-separated list
+		opts.globals = opts.globals.join(',');
+	}
 
-  if (Object.prototype.toString.call(options.globals) === '[object Array]') {
-    // typically wouldn't modify passed options, but mocha requires a comma-
-    // separated list of names, http://mochajs.org/#globals-names, whereas dargs
-    // will treat arrays differently.
-    options.globals = options.globals.join(',');
-  }
+	const args = dargs(opts, {
+		excludes: ['suppress'],
+		ignoreFalse: true
+	});
 
-  // exposing args for testing
-  const args = dargs(options, {excludes: ['suppress'], ignoreFalse: true});
-  const files = [];
+	const files = [];
 
-  function aggregate(file, encoding, done) {
-    if (file.isNull()) {
-      return done(null, file);
-    }
+	function aggregate(file, encoding, done) {
+		if (file.isNull()) {
+			done(null, file);
+			return;
+		}
 
-    if (file.isStream()) {
-      return done(new gutil.PluginError('gulp-mocha', 'Streaming not supported'));
-    }
+		if (file.isStream()) {
+			done(new gutil.PluginError('gulp-mocha', 'Streaming not supported'));
+			return;
+		}
 
-    files.push(file.path);
+		files.push(file.path);
 
-    return done();
-  }
+		done();
+	}
 
-  function flush(done) {
-    execa('mocha', files.concat(args))
-      .then(result => {
-        if (!options.suppress) {
-          process.stdout.write(result.stdout);
-        }
+	function flush(done) {
+		execa('mocha', files.concat(args))
+			.then(result => {
+				if (!opts.suppress) {
+					process.stdout.write(result.stdout);
+				}
 
-        this.emit('result', result);
-        done();
-      })
-      .catch(err => {
-        this.emit('error', new gutil.PluginError('gulp-mocha', err));
-        done();
-      });
-  }
+				// For testing
+				this.emit('_result', result);
 
-  return through.obj(aggregate, flush);
+				done();
+			})
+			.catch(err => {
+				this.emit('error', new gutil.PluginError('gulp-mocha', err));
+				done();
+			});
+	}
+
+	return through.obj(aggregate, flush);
 };

@@ -8,7 +8,7 @@
 
 ---
 
-<p align="center"><b>🔥 Want to strengthen your core JavaScript skills and master ES6?</b><br>I would personally recommend this awesome <a href="https://ES6.io/friend/AWESOME">ES6 course</a> by Wes Bos.</p>
+<p align="center"><b>🔥 Want to strengthen your core JavaScript skills and master ES6?</b><br>I would personally recommend this awesome <a href="https://ES6.io/friend/AWESOME">ES6 course</a> by Wes Bos. You might also like his <a href="https://ReactForBeginners.com/friend/AWESOME">React course</a>.</p>
 
 ---
 
@@ -28,12 +28,10 @@ const mocha = require('gulp-mocha');
 
 gulp.task('default', () =>
 	gulp.src('test.js', {read: false})
-		// gulp-mocha needs filepaths so you can't have any plugins before it
+		// `gulp-mocha` needs filepaths so you can't have any plugins before it
 		.pipe(mocha({reporter: 'nyan'}))
 );
 ```
-
-> If you are writing a watch task to run your tests as you modify your `.js` files, be aware that you might run into issues. This plugin runs your Mocha tests within the same process as your watch task and state isn't reset between runs. If your tests eventually fail within the watch task but pass when run in a standalone task or with `mocha test`, then you need to use the [`gulp-spawn-mocha`](https://github.com/KenPowers/gulp-spawn-mocha) plugin.
 
 
 ## API
@@ -42,9 +40,8 @@ gulp.task('default', () =>
 
 #### options
 
-gulp-mocha will pass any options defined directly to the `mocha` binary. That
-means you have every [command line option](http://mochajs.org/#usage) available
-by default. Listed below are some of the more commonly used options:
+Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Listed below are some of the more commonly used options:
+
 
 ##### ui
 
@@ -122,10 +119,6 @@ gulp.task('default', () =>
 		})
 );
 ```
-
-### Babel
-
-Add `require('babel-core/register');` to the top of your `gulpfile.js`. Make sure to read the [Babel docs](https://babeljs.io/docs/usage/require/).
 
 
 ## License

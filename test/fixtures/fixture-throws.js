@@ -1,6 +1,6 @@
 'use strict';
-var assert = require('assert');
+const assert = require('assert');
 
-it('contains syntax errors', function () {
-  assert false;
+it('contains syntax errors', () => {
+	assert false;
 });

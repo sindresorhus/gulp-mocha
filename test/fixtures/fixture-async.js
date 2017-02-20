@@ -1,9 +1,8 @@
-/* global it */
 'use strict';
-var assert = require('assert');
+const assert = require('assert');
 
-it('should fail after timeout', function (done) {
-  setTimeout(function () {
-    assert(false);
-  }, 10);
+it('should fail after timeout', (done) => {
+	setTimeout(() => {
+		assert(false);
+	}, 10);
 });
