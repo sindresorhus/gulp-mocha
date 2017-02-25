@@ -100,6 +100,12 @@ Type: `Array`
 
 Require custom modules before tests are run.
 
+##### compilers
+
+Type: `String`
+
+Specify a compiler (ex. 'js:babel-core/register')
+
 
 ## FAQ
 
