@@ -3,6 +3,8 @@ const dargs = require('dargs');
 const execa = require('execa');
 const gutil = require('gulp-util');
 const through = require('through2');
+// TODO: Use execa localDir option when available
+const npmRunPath = require('npm-run-path');
 
 module.exports = opts => {
 	opts = Object.assign({
@@ -38,7 +40,9 @@ module.exports = opts => {
 	}
 
 	function flush(done) {
-		let proc = execa('mocha', files.concat(args));
+		const env = npmRunPath.env({cwd: __dirname});
+		const proc = execa('mocha', files.concat(args), {env});
+
 		proc.then(result => {
 			this.emit('_result', result);
 			done();
