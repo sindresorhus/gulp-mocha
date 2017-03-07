@@ -38,21 +38,19 @@ module.exports = opts => {
 	}
 
 	function flush(done) {
-		execa('mocha', files.concat(args))
-			.then(result => {
-				if (!opts.suppress) {
-					process.stdout.write(result.stdout);
-				}
+		let proc = execa('mocha', files.concat(args));
+		proc.then(result => {
+			this.emit('_result', result);
+			done();
+		})
+		.catch(err => {
+			this.emit('error', new gutil.PluginError('gulp-mocha', err));
+			done();
+		});
 
-				// For testing
-				this.emit('_result', result);
-
-				done();
-			})
-			.catch(err => {
-				this.emit('error', new gutil.PluginError('gulp-mocha', err));
-				done();
-			});
+		if (!opts.suppress) {
+			proc.stdout.pipe(process.stdout);
+		}
 	}
 
 	return through.obj(aggregate, flush);
