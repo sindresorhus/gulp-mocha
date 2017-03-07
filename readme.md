@@ -102,9 +102,10 @@ Require custom modules before tests are run.
 
 ##### compilers
 
-Type: `String`
+Type: `string`<br>
+Example: `js:babel-core/register`
 
-Specify a compiler (ex. 'js:babel-core/register')
+Specify a compiler.
 
 
 ## FAQ
