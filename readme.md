@@ -40,7 +40,7 @@ gulp.task('default', () =>
 
 #### options
 
-Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Listed below are some of the more commonly used options:
+Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Arrays are correctly converted to the comma separated list format Mocha expects. Listed below are some of the more commonly used options:
 
 
 ##### ui

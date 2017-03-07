@@ -10,9 +10,13 @@ module.exports = opts => {
 		suppress: false
 	}, opts);
 
-	if (Array.isArray(opts.globals)) {
-		// `globals` option should end up as a comma-separated list
-		opts.globals = opts.globals.join(',');
+	// Convert arrays into comma separated lists
+	for (const key of Object.keys(opts)) {
+		const val = opts[key];
+
+		if (Array.isArray(val)) {
+			opts[key] = val.join(',');
+		}
 	}
 
 	const args = dargs(opts, {
