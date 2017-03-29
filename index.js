@@ -54,6 +54,7 @@ module.exports = opts => {
 
 		if (!opts.suppress) {
 			proc.stdout.pipe(process.stdout);
+			proc.stderr.pipe(process.stderr);
 		}
 	}
 
