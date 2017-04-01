@@ -6,6 +6,8 @@ const through = require('through2');
 // TODO: Use execa localDir option when available
 const npmRunPath = require('npm-run-path');
 
+const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
+
 module.exports = opts => {
 	opts = Object.assign({
 		colors: true,
@@ -41,7 +43,10 @@ module.exports = opts => {
 
 	function flush(done) {
 		const env = npmRunPath.env({cwd: __dirname});
-		const proc = execa('mocha', files.concat(args), {env});
+		const proc = execa('mocha', files.concat(args), {
+			env,
+			maxBuffer: HUNDRED_MEGABYTES
+		});
 
 		proc.then(result => {
 			this.emit('_result', result);
