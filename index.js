@@ -20,6 +20,10 @@ module.exports = opts => {
 
 		if (Array.isArray(val)) {
 			opts[key] = val.join(',');
+
+			// Convert an object into comma separated list.
+		} else if (typeof val === 'object') {
+			opts[key] = convertObjectToList(val);
 		}
 	}
 
@@ -61,6 +65,27 @@ module.exports = opts => {
 			proc.stdout.pipe(process.stdout);
 			proc.stderr.pipe(process.stderr);
 		}
+	}
+
+	function objectEntries(object) {
+		const entries = [];
+		for (const key in object) {
+			if (has(object, key)) {
+				const value = object[key];
+				entries.push([key, value]);
+			}
+		}
+		return entries;
+	}
+
+	function convertObjectToList(object) {
+		return objectEntries(object)
+			.reduce((result, current) => result.concat(`${current[0]}=${current[1]}`), [])
+			.join(',');
+	}
+
+	function has(object, prop) {
+		return Object.prototype.hasOwnProperty.call(object, prop);
 	}
 
 	return through.obj(aggregate, flush);
