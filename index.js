@@ -5,6 +5,9 @@ const gutil = require('gulp-util');
 const through = require('through2');
 // TODO: Use execa localDir option when available
 const npmRunPath = require('npm-run-path');
+const utils = require('./utils');
+
+const convertObjectToList = utils.convertObjectToList;
 
 const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
 
@@ -56,36 +59,15 @@ module.exports = opts => {
 			this.emit('_result', result);
 			done();
 		})
-		.catch(err => {
-			this.emit('error', new gutil.PluginError('gulp-mocha', err));
-			done();
-		});
+			.catch(err => {
+				this.emit('error', new gutil.PluginError('gulp-mocha', err));
+				done();
+			});
 
 		if (!opts.suppress) {
 			proc.stdout.pipe(process.stdout);
 			proc.stderr.pipe(process.stderr);
 		}
-	}
-
-	function objectEntries(object) {
-		const entries = [];
-		for (const key in object) {
-			if (has(object, key)) {
-				const value = object[key];
-				entries.push([key, value]);
-			}
-		}
-		return entries;
-	}
-
-	function convertObjectToList(object) {
-		return objectEntries(object)
-			.reduce((result, current) => result.concat(`${current[0]}=${current[1]}`), [])
-			.join(',');
-	}
-
-	function has(object, prop) {
-		return Object.prototype.hasOwnProperty.call(object, prop);
 	}
 
 	return through.obj(aggregate, flush);
