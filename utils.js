@@ -1,3 +1,5 @@
+'use strict';
+
 function objectEntries(object) {
 	const entries = [];
 	for (const key of Object.keys(object)) {
