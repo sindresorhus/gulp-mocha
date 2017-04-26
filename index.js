@@ -8,6 +8,11 @@ const npmRunPath = require('npm-run-path');
 
 const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
 
+// List of mocha options that can be specified multiple times
+const MULTIPLE_OPTS = [
+	'require'
+];
+
 module.exports = opts => {
 	opts = Object.assign({
 		colors: true,
@@ -18,7 +23,7 @@ module.exports = opts => {
 	for (const key of Object.keys(opts)) {
 		const val = opts[key];
 
-		if (Array.isArray(val)) {
+		if (MULTIPLE_OPTS.indexOf(key) > 0 && Array.isArray(val)) {
 			opts[key] = val.join(',');
 		}
 	}
