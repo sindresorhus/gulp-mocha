@@ -61,4 +61,18 @@ describe('mocha()', () => {
 		stream.write(fixture('fixture-pass.js'));
 		stream.end();
 	});
+
+	it('should require two files', done => {
+		const stream = mocha({require: [
+			'test/fixtures/fixture-require1.js',
+			'test/fixtures/fixture-require2.js'
+		]});
+
+		stream.once('_result', result => {
+			assert(/1 passing/.test(result.stdout));
+			done();
+		});
+		stream.write(fixture('fixture-pass.js'));
+		stream.end();
+	});
 });
