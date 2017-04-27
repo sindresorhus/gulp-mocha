@@ -8,7 +8,7 @@ const npmRunPath = require('npm-run-path');
 
 const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
 
-// List of mocha options that can be specified multiple times
+// Mocha options that can be specified multiple times
 const MULTIPLE_OPTS = [
 	'require'
 ];
