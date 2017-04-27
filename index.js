@@ -5,6 +5,9 @@ const gutil = require('gulp-util');
 const through = require('through2');
 // TODO: Use execa localDir option when available
 const npmRunPath = require('npm-run-path');
+const utils = require('./utils');
+
+const convertObjectToList = utils.convertObjectToList;
 
 const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
 
@@ -25,6 +28,10 @@ module.exports = opts => {
 
 		if (MULTIPLE_OPTS.indexOf(key) > 0 && Array.isArray(val)) {
 			opts[key] = val.join(',');
+
+			// Convert an object into comma separated list.
+		} else if (typeof val === 'object') {
+			opts[key] = convertObjectToList(val);
 		}
 	}
 
@@ -57,10 +64,10 @@ module.exports = opts => {
 			this.emit('_result', result);
 			done();
 		})
-		.catch(err => {
-			this.emit('error', new gutil.PluginError('gulp-mocha', err));
-			done();
-		});
+			.catch(err => {
+				this.emit('error', new gutil.PluginError('gulp-mocha', err));
+				done();
+			});
 
 		if (!opts.suppress) {
 			proc.stdout.pipe(process.stdout);
