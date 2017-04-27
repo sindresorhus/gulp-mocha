@@ -88,6 +88,23 @@ Default: `false`
 
 Check for global variable leaks.
 
+##### test
+
+Type: `string`
+
+Default: `test`
+
+Sets a custom path to for the test directory. This is useful if you want to seperate your unit tests/specs from end to end tests, and do not want to run both together. 
+
+Example: 
+
+```
+mocha({
+    test: 'tests/backEnd/specs/**/*.js',
+    reporter: 'spec'
+}
+```
+
 ##### grep
 
 Type: `string`
