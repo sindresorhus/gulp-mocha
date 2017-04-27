@@ -13,7 +13,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "xo && mocha"
+    "test": "xo && ava"
   },
   "files": [
     "index.js",
@@ -42,13 +42,9 @@
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "ava": "*",
     "gulp": "^3.9.1",
+    "p-event": "^1.0.0",
     "xo": "*"
-  },
-  "xo": {
-    "envs": [
-      "node",
-      "mocha"
-    ]
   }
 }

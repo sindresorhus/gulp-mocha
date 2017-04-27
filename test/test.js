@@ -1,9 +1,9 @@
-'use strict';
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
-const gutil = require('gulp-util');
-const mocha = require('..');
+import fs from 'fs';
+import path from 'path';
+import test from 'ava';
+import gutil from 'gulp-util';
+import pEvent from 'p-event';
+import mocha from '..';
 
 function fixture(name) {
 	const fileName = path.join(__dirname, 'fixtures', name);
@@ -14,65 +14,39 @@ function fixture(name) {
 	});
 }
 
-describe('mocha()', () => {
-	it('should run unit test and pass', done => {
-		const stream = mocha({suppress: true});
+test('run unit test and pass', async t => {
+	const stream = mocha({suppress: true});
+	const result = pEvent(stream, '_result');
+	stream.end(fixture('fixture-pass.js'));
+	t.regex((await result).stdout, /1 passing/);
+});
 
-		stream.once('_result', result => {
-			assert(/1 passing/.test(result.stdout));
-			done();
-		});
-		stream.write(fixture('fixture-pass.js'));
-		stream.end();
-	});
+test('run unit test and fail', async t => {
+	const stream = mocha({suppress: true});
+	const error = pEvent(stream, 'error');
+	stream.end(fixture('fixture-fail.js'));
+	t.regex((await error).stdout, /1 failing/);
+});
 
-	it('should run unit test and fail', done => {
-		const stream = mocha({suppress: true});
+test('pass async AssertionError to mocha', async t => {
+	const stream = mocha({suppress: true});
+	const event = pEvent(stream, 'error');
+	stream.end(fixture('fixture-async.js'));
+	const error = await event;
+	const throws = /throws after timeout/.test(error.stdout);
+	const uncaught = /Uncaught AssertionError: false == true/.test(error.stdout);
+	t.true(throws || uncaught);
+});
 
-		stream.once('error', err => {
-			assert(/1 failing/.test(err.stdout));
-			done();
-		});
-		stream.write(fixture('fixture-fail.js'));
-		stream.end();
-	});
-
-	it('should pass async AssertionError to mocha', done => {
-		const stream = mocha({suppress: true});
-
-		stream.once('error', err => {
-			const throws = /throws after timeout/.test(err.stdout);
-			const uncaught = /Uncaught AssertionError: false == true/.test(err.stdout);
-
-			assert(throws || uncaught);
-			done();
-		});
-		stream.write(fixture('fixture-async.js'));
-		stream.end();
-	});
-
-	it('should not suppress output', done => {
-		const stream = mocha();
-
-		stream.once('_result', result => {
-			assert(/should pass/.test(result.stdout));
-			done();
-		});
-		stream.write(fixture('fixture-pass.js'));
-		stream.end();
-	});
-
-	it('should require two files', done => {
-		const stream = mocha({require: [
+test('require two files', async t => {
+	const stream = mocha({
+		suppress: true,
+		require: [
 			'test/fixtures/fixture-require1.js',
 			'test/fixtures/fixture-require2.js'
-		]});
-
-		stream.once('_result', result => {
-			assert(/1 passing/.test(result.stdout));
-			done();
-		});
-		stream.write(fixture('fixture-pass.js'));
-		stream.end();
+		]
 	});
+	const result = pEvent(stream, '_result');
+	stream.end(fixture('fixture-pass.js'));
+	t.regex((await result).stdout, /1 passing/);
 });
