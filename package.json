@@ -16,7 +16,8 @@
     "test": "xo && mocha"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "utils.js"
   ],
   "keywords": [
     "gulpplugin",

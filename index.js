@@ -7,14 +7,12 @@ const through = require('through2');
 const npmRunPath = require('npm-run-path');
 const utils = require('./utils');
 
-const convertObjectToList = utils.convertObjectToList;
-
 const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
 
 // Mocha options that can be specified multiple times
-const MULTIPLE_OPTS = [
+const MULTIPLE_OPTS = new Set([
 	'require'
-];
+]);
 
 module.exports = opts => {
 	opts = Object.assign({
@@ -22,16 +20,17 @@ module.exports = opts => {
 		suppress: false
 	}, opts);
 
-	// Convert arrays into comma separated lists
 	for (const key of Object.keys(opts)) {
 		const val = opts[key];
 
-		if (MULTIPLE_OPTS.indexOf(key) > 0 && Array.isArray(val)) {
-			opts[key] = val.join(',');
-
-			// Convert an object into comma separated list.
+		if (Array.isArray(val)) {
+			if (!MULTIPLE_OPTS.has(key)) {
+				// Convert arrays into comma separated lists
+				opts[key] = val.join(',');
+			}
 		} else if (typeof val === 'object') {
-			opts[key] = convertObjectToList(val);
+			// Convert an object into comma separated list
+			opts[key] = utils.convertObjectToList(val);
 		}
 	}
 

@@ -2,10 +2,12 @@
 
 function objectEntries(object) {
 	const entries = [];
+
 	for (const key of Object.keys(object)) {
 		const value = object[key];
 		entries.push([key, value]);
 	}
+
 	return entries;
 }
 
