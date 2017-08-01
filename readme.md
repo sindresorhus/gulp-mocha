@@ -40,7 +40,7 @@ gulp.task('default', () =>
 
 #### options
 
-Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Arrays are correctly converted to the comma separated list format Mocha expects. Listed below are some of the more commonly used options:
+Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Arrays and key/value objects are correctly converted to the comma separated list format Mocha expects. Listed below are some of the more commonly used options:
 
 
 ##### ui
@@ -60,6 +60,13 @@ Values: [Reporters](https://github.com/mochajs/mocha/tree/master/lib/reporters)
 Reporter that will be used.
 
 This option can also be used to utilize third-party reporters. For example, if you `npm install mocha-lcov-reporter` you can then do use `mocha-lcov-reporter` as value.
+
+##### reporterOptions
+
+Type: `object`<br>
+Example: `reporterOptions: { reportFilename: 'index.html' }`
+
+Reporter specific options.
 
 ##### globals
 
