@@ -33,9 +33,7 @@ test('pass async AssertionError to mocha', async t => {
 	const event = pEvent(stream, 'error');
 	stream.end(fixture('fixture-async.js'));
 	const error = await event;
-	const throws = /throws after timeout/.test(error.stdout);
-	const uncaught = /Uncaught AssertionError: false == true/.test(error.stdout);
-	t.true(throws || uncaught);
+	t.regex(error.stdout, /throws after timeout|Uncaught AssertionError.*: false == true/);
 });
 
 test('require two files', async t => {
