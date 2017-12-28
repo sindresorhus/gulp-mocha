@@ -1,7 +1,7 @@
 'use strict';
 const dargs = require('dargs');
 const execa = require('execa');
-const gutil = require('gulp-util');
+const PluginError = require('plugin-error');
 const through = require('through2');
 // TODO: Use execa localDir option when available
 const npmRunPath = require('npm-run-path');
@@ -43,7 +43,7 @@ module.exports = opts => {
 
 	function aggregate(file, encoding, done) {
 		if (file.isStream()) {
-			done(new gutil.PluginError('gulp-mocha', 'Streaming not supported'));
+			done(new PluginError('gulp-mocha', 'Streaming not supported'));
 			return;
 		}
 
@@ -64,7 +64,7 @@ module.exports = opts => {
 			done();
 		})
 			.catch(err => {
-				this.emit('error', new gutil.PluginError('gulp-mocha', err));
+				this.emit('error', new PluginError('gulp-mocha', err));
 				done();
 			});
 

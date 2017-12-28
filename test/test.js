@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import test from 'ava';
-import gutil from 'gulp-util';
+import Vinyl from 'vinyl';
 import pEvent from 'p-event';
 import mocha from '..';
 
 function fixture(name) {
 	const fileName = path.join(__dirname, 'fixtures', name);
 
-	return new gutil.File({
+	return new Vinyl({
 		path: fileName,
 		contents: fs.existsSync(fileName) ? fs.readFileSync(fileName) : null
 	});
