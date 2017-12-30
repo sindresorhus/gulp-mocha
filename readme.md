@@ -63,8 +63,8 @@ This option can also be used to utilize third-party reporters. For example, if y
 
 ##### reporterOptions
 
-Type: `object`<br>
-Example: `reporterOptions: { reportFilename: 'index.html' }`
+Type: `Object`<br>
+Example: `{reportFilename: 'index.html'}`
 
 Reporter specific options.
 
