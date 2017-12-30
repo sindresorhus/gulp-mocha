@@ -127,13 +127,13 @@ gulp.task('default', () =>
 );
 ```
 
-Or you might just need to pass the **exit** command-line parameter to Mocha, as in this example (this is for Mocha 4+):
+Or you might just need to pass the `exit` option:
 
 ```js
 gulp.task('test', () =>
 	gulp.src(['test/**/*.js'], {read: false})
 		.pipe(mocha({reporter: 'list', exit: true}))
-		.on('error', gutil.log)
+		.on('error', console.error)
 );
 ```
 
