@@ -36,15 +36,16 @@
   "dependencies": {
     "dargs": "^5.1.0",
     "execa": "^0.6.0",
-    "gulp-util": "^3.0.0",
     "mocha": "^3.0.0",
     "npm-run-path": "^2.0.2",
+    "plugin-error": "^0.1.2",
     "through2": "^2.0.3"
   },
   "devDependencies": {
     "ava": "*",
     "gulp": "^3.9.1",
     "p-event": "^1.0.0",
+    "vinyl": "^2.1.0",
     "xo": "*"
   }
 }
