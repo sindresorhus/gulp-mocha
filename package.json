@@ -1,51 +1,51 @@
 {
-  "name": "gulp-mocha",
-  "version": "4.3.1",
-  "description": "Run Mocha tests",
-  "license": "MIT",
-  "repository": "sindresorhus/gulp-mocha",
-  "author": {
-    "name": "Sindre Sorhus",
-    "email": "sindresorhus@gmail.com",
-    "url": "sindresorhus.com"
-  },
-  "engines": {
-    "node": ">=4"
-  },
-  "scripts": {
-    "test": "xo && ava"
-  },
-  "files": [
-    "index.js",
-    "utils.js"
-  ],
-  "keywords": [
-    "gulpplugin",
-    "mocha",
-    "test",
-    "testing",
-    "unit",
-    "framework",
-    "runner",
-    "tdd",
-    "bdd",
-    "qunit",
-    "spec",
-    "tap"
-  ],
-  "dependencies": {
-    "dargs": "^5.1.0",
-    "execa": "^0.6.0",
-    "mocha": "^3.0.0",
-    "npm-run-path": "^2.0.2",
-    "plugin-error": "^0.1.2",
-    "through2": "^2.0.3"
-  },
-  "devDependencies": {
-    "ava": "*",
-    "gulp": "^3.9.1",
-    "p-event": "^1.0.0",
-    "vinyl": "^2.1.0",
-    "xo": "*"
-  }
+	"name": "gulp-mocha",
+	"version": "4.3.1",
+	"description": "Run Mocha tests",
+	"license": "MIT",
+	"repository": "sindresorhus/gulp-mocha",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"test": "xo && ava"
+	},
+	"files": [
+		"index.js",
+		"utils.js"
+	],
+	"keywords": [
+		"gulpplugin",
+		"mocha",
+		"test",
+		"testing",
+		"unit",
+		"framework",
+		"runner",
+		"tdd",
+		"bdd",
+		"qunit",
+		"spec",
+		"tap"
+	],
+	"dependencies": {
+		"dargs": "^5.1.0",
+		"execa": "^0.8.0",
+		"mocha": "^4.1.0",
+		"npm-run-path": "^2.0.2",
+		"plugin-error": "^0.1.2",
+		"through2": "^2.0.3"
+	},
+	"devDependencies": {
+		"ava": "*",
+		"gulp": "^3.9.1",
+		"p-event": "^1.0.0",
+		"vinyl": "^2.1.0",
+		"xo": "*"
+	}
 }
