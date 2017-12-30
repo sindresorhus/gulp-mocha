@@ -135,6 +135,16 @@ gulp.task('default', () =>
 );
 ```
 
+Or you might just need to pass the `exit` option:
+
+```js
+gulp.task('test', () =>
+	gulp.src(['test/**/*.js'], {read: false})
+		.pipe(mocha({reporter: 'list', exit: true}))
+		.on('error', console.error)
+);
+```
+
 
 ## License
 
