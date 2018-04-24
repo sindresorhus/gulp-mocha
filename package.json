@@ -39,6 +39,7 @@
 		"mocha": "^4.1.0",
 		"npm-run-path": "^2.0.2",
 		"plugin-error": "^0.1.2",
+		"supports-color": "^5.4.0",
 		"through2": "^2.0.3"
 	},
 	"devDependencies": {

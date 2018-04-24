@@ -2,6 +2,7 @@
 const dargs = require('dargs');
 const execa = require('execa');
 const PluginError = require('plugin-error');
+const supportsColor = require('supports-color');
 const through = require('through2');
 // TODO: Use execa localDir option when available
 const npmRunPath = require('npm-run-path');
@@ -16,7 +17,7 @@ const MULTIPLE_OPTS = new Set([
 
 module.exports = opts => {
 	opts = Object.assign({
-		colors: true,
+		colors: !!supportsColor.stdout,
 		suppress: false
 	}, opts);
 
