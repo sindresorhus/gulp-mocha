@@ -60,10 +60,11 @@ module.exports = opts => {
 			maxBuffer: HUNDRED_MEGABYTES
 		});
 
-		proc.then(result => {
-			this.emit('_result', result);
-			done();
-		})
+		proc
+			.then(result => {
+				this.emit('_result', result);
+				done();
+			})
 			.catch(err => {
 				this.emit('error', new PluginError('gulp-mocha', err.code > 0 ? 'There were test failures' : err));
 				done();

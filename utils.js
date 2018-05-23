@@ -1,5 +1,6 @@
 'use strict';
 
+// TODO: Use `Object.entries` when targeting Node.js 8
 function objectEntries(object) {
 	const entries = [];
 

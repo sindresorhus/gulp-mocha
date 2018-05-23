@@ -40,6 +40,8 @@ gulp.task('default', () =>
 
 #### options
 
+Type: `Object`
+
 Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Arrays and key/value objects are correctly converted to the comma separated list format Mocha expects. Listed below are some of the more commonly used options:
 
 
