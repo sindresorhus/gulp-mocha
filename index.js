@@ -17,7 +17,7 @@ const MULTIPLE_OPTS = new Set([
 
 module.exports = opts => {
 	opts = Object.assign({
-		colors: !!supportsColor.stdout,
+		colors: Boolean(supportsColor.stdout),
 		suppress: false
 	}, opts);
 
