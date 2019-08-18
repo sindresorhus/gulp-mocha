@@ -6,12 +6,6 @@
 
 **[Maintainer needed](https://github.com/sindresorhus/gulp-mocha/issues/128)**
 
----
-
-<p align="center"><b>🔥 Want to strengthen your core JavaScript skills and master ES6?</b><br>I would personally recommend this awesome <a href="https://ES6.io/friend/AWESOME">ES6 course</a> by Wes Bos. You might also like his <a href="https://ReactForBeginners.com/friend/AWESOME">React course</a>.</p>
-
----
-
 
 ## Install
 
@@ -26,7 +20,7 @@ $ npm install --save-dev gulp-mocha
 const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('test.js', {read: false})
 		// `gulp-mocha` needs filepaths so you can't have any plugins before it
 		.pipe(mocha({reporter: 'nyan'}))
@@ -36,14 +30,13 @@ gulp.task('default', () =>
 
 ## API
 
-### mocha([options])
+### mocha(options?)
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 Options are passed directly to the `mocha` binary, so you can use any its [command-line options](http://mochajs.org/#usage) in a camelCased form. Arrays and key/value objects are correctly converted to the comma separated list format Mocha expects. Listed below are some of the more commonly used options:
-
 
 ##### ui
 
@@ -65,14 +58,14 @@ This option can also be used to utilize third-party reporters. For example, if y
 
 ##### reporterOptions
 
-Type: `Object`<br>
+Type: `object`<br>
 Example: `{reportFilename: 'index.html'}`
 
 Reporter specific options.
 
 ##### globals
 
-Type: `Array`
+Type: `string[]`
 
 List of accepted global variable names, example `['YUI']`. Accepts wildcards to match multiple global variables, e.g. `['gulp*']` or even `['*']`. See [Mocha globals option](http://mochajs.org/#globals-option).
 
@@ -105,7 +98,7 @@ Only run tests matching the given pattern which is internally compiled to a RegE
 
 ##### require
 
-Type: `Array`
+Type: `string[]`
 
 Require custom modules before tests are run.
 
@@ -124,7 +117,7 @@ Specify a compiler.
 If your test suite is not exiting it might be because you still have a lingering callback, most often caused by an open database connection. You should close this connection or do the following:
 
 ```js
-gulp.task('default', () =>
+exports.default = () => (
 	gulp.src('test.js')
 		.pipe(mocha())
 		.once('error', err => {
@@ -140,14 +133,9 @@ gulp.task('default', () =>
 Or you might just need to pass the `exit` option:
 
 ```js
-gulp.task('test', () =>
+exports.test = () => (
 	gulp.src(['test/**/*.js'], {read: false})
 		.pipe(mocha({reporter: 'list', exit: true}))
 		.on('error', console.error)
 );
 ```
-
-
-## License
-
-MIT © [Sindre Sorhus](https://sindresorhus.com)

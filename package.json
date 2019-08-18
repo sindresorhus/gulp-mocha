@@ -10,7 +10,7 @@
 		"url": "sindresorhus.com"
 	},
 	"engines": {
-		"node": ">=6"
+		"node": ">=8"
 	},
 	"scripts": {
 		"test": "xo && ava"
@@ -34,19 +34,34 @@
 		"tap"
 	],
 	"dependencies": {
-		"dargs": "^5.1.0",
-		"execa": "^0.10.0",
-		"mocha": "^5.2.0",
-		"npm-run-path": "^2.0.2",
+		"dargs": "^7.0.0",
+		"execa": "^2.0.4",
+		"mocha": "^6.2.0",
 		"plugin-error": "^1.0.1",
-		"supports-color": "^5.4.0",
-		"through2": "^2.0.3"
+		"supports-color": "^7.0.0",
+		"through2": "^3.0.1"
 	},
 	"devDependencies": {
-		"ava": "*",
-		"gulp": "^3.9.1",
-		"p-event": "^1.0.0",
+		"ava": "^2.3.0",
+		"gulp": "^4.0.2",
+		"p-event": "^4.1.0",
 		"vinyl": "^2.1.0",
-		"xo": "*"
+		"xo": "^0.24.0"
+	},
+	"peerDependencies": {
+		"gulp": ">=4"
+	},
+	"xo": {
+		"ignores": [
+			"test/fixtures"
+		],
+		"rules": {
+			"ava/no-ignored-test-files": "off"
+		}
+	},
+	"ava": {
+		"files": [
+			"test/test.js"
+		]
 	}
 }

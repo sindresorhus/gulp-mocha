@@ -4,38 +4,33 @@ const execa = require('execa');
 const PluginError = require('plugin-error');
 const supportsColor = require('supports-color');
 const through = require('through2');
-// TODO: Use execa localDir option when available
-const npmRunPath = require('npm-run-path');
 const utils = require('./utils');
-
-const HUNDRED_MEGABYTES = 1000 * 1000 * 100;
 
 // Mocha options that can be specified multiple times
 const MULTIPLE_OPTS = new Set([
 	'require'
 ]);
 
-module.exports = opts => {
-	opts = Object.assign({
+module.exports = options => {
+	options = {
 		colors: Boolean(supportsColor.stdout),
-		suppress: false
-	}, opts);
+		suppress: false,
+		...options
+	};
 
-	for (const key of Object.keys(opts)) {
-		const val = opts[key];
-
-		if (Array.isArray(val)) {
+	for (const [key, value] of Object.entries(options)) {
+		if (Array.isArray(value)) {
 			if (!MULTIPLE_OPTS.has(key)) {
 				// Convert arrays into comma separated lists
-				opts[key] = val.join(',');
+				options[key] = value.join(',');
 			}
-		} else if (typeof val === 'object') {
+		} else if (typeof value === 'object') {
 			// Convert an object into comma separated list
-			opts[key] = utils.convertObjectToList(val);
+			options[key] = utils.convertObjectToList(value);
 		}
 	}
 
-	const args = dargs(opts, {
+	const args = dargs(options, {
 		excludes: ['suppress'],
 		ignoreFalse: true
 	});
@@ -54,26 +49,25 @@ module.exports = opts => {
 	}
 
 	function flush(done) {
-		const env = npmRunPath.env({cwd: __dirname});
-		const proc = execa('mocha', files.concat(args), {
-			env,
-			maxBuffer: HUNDRED_MEGABYTES
-		});
-
-		proc
-			.then(result => {
-				this.emit('_result', result);
-				done();
-			})
-			.catch(err => {
-				this.emit('error', new PluginError('gulp-mocha', err.code > 0 ? 'There were test failures' : err));
-				done();
+		(async () => {
+			const subprocess = execa('mocha', files.concat(args), {
+				localDir: __dirname
 			});
 
-		if (!opts.suppress) {
-			proc.stdout.pipe(process.stdout);
-			proc.stderr.pipe(process.stderr);
-		}
+			if (!options.suppress) {
+				subprocess.stdout.pipe(subprocess.stdout);
+				subprocess.stderr.pipe(subprocess.stderr);
+			}
+
+			try {
+				const result = await subprocess;
+				this.emit('_result', result);
+			} catch (error) {
+				this.emit('error', new PluginError('gulp-mocha', error.exitCode > 0 ? 'There were test failures' : error));
+			}
+
+			done();
+		})();
 	}
 
 	return through.obj(aggregate, flush);
