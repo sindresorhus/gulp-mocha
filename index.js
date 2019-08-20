@@ -56,8 +56,8 @@ module.exports = options => {
 			});
 
 			if (!options.suppress) {
-				subprocess.stdout.pipe(subprocess.stdout);
-				subprocess.stderr.pipe(subprocess.stderr);
+				subprocess.stdout.pipe(process.stdout);
+				subprocess.stderr.pipe(process.stderr);
 			}
 
 			try {
