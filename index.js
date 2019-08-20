@@ -51,7 +51,8 @@ module.exports = options => {
 	function flush(done) {
 		(async () => {
 			const subprocess = execa('mocha', files.concat(args), {
-				localDir: __dirname
+				localDir: __dirname,
+				preferLocal: true
 			});
 
 			if (!options.suppress) {
