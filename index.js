@@ -51,12 +51,13 @@ module.exports = options => {
 	function flush(done) {
 		(async () => {
 			const subprocess = execa('mocha', files.concat(args), {
-				localDir: __dirname
+				localDir: __dirname,
+				preferLocal: true
 			});
 
 			if (!options.suppress) {
-				subprocess.stdout.pipe(subprocess.stdout);
-				subprocess.stderr.pipe(subprocess.stderr);
+				subprocess.stdout.pipe(process.stdout);
+				subprocess.stderr.pipe(process.stderr);
 			}
 
 			try {
