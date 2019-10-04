@@ -51,6 +51,11 @@
 	"peerDependencies": {
 		"gulp": ">=4"
 	},
+	"peerDependenciesMeta": {
+		"gulp": {
+			"optional": true
+		}
+	},
 	"xo": {
 		"ignores": [
 			"test/fixtures"
