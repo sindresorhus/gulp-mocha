@@ -4,8 +4,6 @@
 
 *Keep in mind that this is just a thin wrapper around Mocha and your issue is most likely with Mocha.*
 
-**[Maintainer needed](https://github.com/sindresorhus/gulp-mocha/issues/128)**
-
 
 ## Install
 
