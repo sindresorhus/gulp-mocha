@@ -1,4 +1,4 @@
-# gulp-mocha [![Build Status](https://travis-ci.org/sindresorhus/gulp-mocha.svg?branch=master)](https://travis-ci.org/sindresorhus/gulp-mocha)
+# gulp-mocha
 
 > Run [Mocha](https://github.com/mochajs/mocha) tests
 
