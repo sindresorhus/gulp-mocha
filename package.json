@@ -4,13 +4,14 @@
 	"description": "Run Mocha tests",
 	"license": "MIT",
 	"repository": "sindresorhus/gulp-mocha",
+	"funding": "https://github.com/sponsors/sindresorhus",
 	"author": {
 		"name": "Sindre Sorhus",
 		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"url": "https://sindresorhus.com"
 	},
 	"engines": {
-		"node": ">=8"
+		"node": ">=10"
 	},
 	"scripts": {
 		"test": "xo && ava"
@@ -35,18 +36,18 @@
 	],
 	"dependencies": {
 		"dargs": "^7.0.0",
-		"execa": "^2.0.4",
-		"mocha": "^6.2.0",
+		"execa": "^5.0.0",
+		"mocha": "^8.3.0",
 		"plugin-error": "^1.0.1",
-		"supports-color": "^7.0.0",
-		"through2": "^3.0.1"
+		"supports-color": "^8.1.1",
+		"through2": "^4.0.2"
 	},
 	"devDependencies": {
 		"ava": "^2.3.0",
 		"gulp": "^4.0.2",
-		"p-event": "^4.1.0",
-		"vinyl": "^2.1.0",
-		"xo": "^0.24.0"
+		"p-event": "^4.2.0",
+		"vinyl": "^2.2.1",
+		"xo": "^0.37.1"
 	},
 	"peerDependencies": {
 		"gulp": ">=4"

@@ -3,7 +3,7 @@ import path from 'path';
 import test from 'ava';
 import Vinyl from 'vinyl';
 import pEvent from 'p-event';
-import mocha from '..';
+import mocha from '../index.js';
 
 function fixture(name) {
 	const fileName = path.join(__dirname, 'fixtures', name);
