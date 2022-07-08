@@ -4,7 +4,7 @@ const execa = require('execa');
 const PluginError = require('plugin-error');
 const supportsColor = require('supports-color');
 const through = require('through2');
-const utils = require('./utils');
+const utils = require('./utils.js');
 
 // Mocha options that can be specified multiple times
 const MULTIPLE_OPTS = new Set([
