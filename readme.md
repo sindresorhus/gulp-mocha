@@ -4,27 +4,24 @@
 
 *Keep in mind that this is just a thin wrapper around Mocha and your issue is most likely with Mocha.*
 
-
 ## Install
 
+```sh
+npm install --save-dev gulp-mocha
 ```
-$ npm install --save-dev gulp-mocha
-```
-
 
 ## Usage
 
 ```js
-const gulp = require('gulp');
-const mocha = require('gulp-mocha');
+import gulp from 'gulp';
+import mocha from 'gulp-mocha';
 
-exports.default = () => (
+export default () => (
 	gulp.src('test.js', {read: false})
-		// `gulp-mocha` needs filepaths so you can't have any plugins before it
+		// `gulp-mocha` needs file paths so you cannot have any plugins before it.
 		.pipe(mocha({reporter: 'nyan'}))
 );
 ```
-
 
 ## API
 
@@ -38,25 +35,25 @@ Options are passed directly to the `mocha` binary, so you can use any its [comma
 
 ##### ui
 
-Type: `string`<br>
-Default: `bdd`<br>
-Values: `bdd` `tdd` `qunit` `exports`
+Type: `string`\
+Default: `'bdd'`\
+Values: `'bdd' | 'tdd' | 'qunit' | 'exports'`
 
-Interface to use.
+The interface to use.
 
 ##### reporter
 
-Type: `string`<br>
-Default: `spec`
+Type: `string`\
+Default: `spec`\
 Values: [Reporters](https://github.com/mochajs/mocha/tree/master/lib/reporters)
 
-Reporter that will be used.
+The reporter that will be used.
 
 This option can also be used to utilize third-party reporters. For example, if you `npm install mocha-lcov-reporter` you can then do use `mocha-lcov-reporter` as value.
 
 ##### reporterOptions
 
-Type: `object`<br>
+Type: `object`\
 Example: `{reportFilename: 'index.html'}`
 
 Reporter specific options.
@@ -69,21 +66,21 @@ List of accepted global variable names, example `['YUI']`. Accepts wildcards to 
 
 ##### timeout
 
-Type: `number`<br>
+Type: `number`\
 Default: `2000`
 
 Test-case timeout in milliseconds.
 
 ##### bail
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 Bail on the first test failure.
 
 ##### checkLeaks
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 Check for global variable leaks.
@@ -102,11 +99,10 @@ Require custom modules before tests are run.
 
 ##### compilers
 
-Type: `string`<br>
+Type: `string`\
 Example: `js:babel-core/register`
 
 Specify a compiler.
-
 
 ## FAQ
 
@@ -115,7 +111,7 @@ Specify a compiler.
 If your test suite is not exiting it might be because you still have a lingering callback, most often caused by an open database connection. You should close this connection or do the following:
 
 ```js
-exports.default = () => (
+export default () => (
 	gulp.src('test.js')
 		.pipe(mocha())
 		.once('error', err => {
@@ -131,7 +127,7 @@ exports.default = () => (
 Or you might just need to pass the `exit` option:
 
 ```js
-exports.test = () => (
+export const test = () => (
 	gulp.src(['test/**/*.js'], {read: false})
 		.pipe(mocha({reporter: 'list', exit: true}))
 		.on('error', console.error)

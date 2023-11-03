@@ -10,6 +10,7 @@
 		"email": "sindresorhus@gmail.com",
 		"url": "https://sindresorhus.com"
 	},
+	"type": "module",
 	"exports": "./index.js",
 	"engines": {
 		"node": ">=18"
@@ -18,8 +19,7 @@
 		"test": "xo && ava"
 	},
 	"files": [
-		"index.js",
-		"utils.js"
+		"index.js"
 	],
 	"keywords": [
 		"gulpplugin",
@@ -36,19 +36,18 @@
 		"tap"
 	],
 	"dependencies": {
-		"dargs": "^7.0.0",
-		"execa": "^5.0.0",
+		"dargs": "^8.1.0",
+		"execa": "^8.0.1",
+		"gulp-plugin-extras": "^0.3.0",
 		"mocha": "^10.2.0",
-		"plugin-error": "^1.0.1",
-		"supports-color": "^8.1.1",
-		"through2": "^4.0.2"
+		"supports-color": "^9.4.0"
 	},
 	"devDependencies": {
-		"ava": "^2.3.0",
+		"ava": "^5.3.1",
 		"gulp": "^4.0.2",
-		"p-event": "^4.2.0",
+		"p-event": "^6.0.0",
 		"vinyl": "^3.0.0",
-		"xo": "^0.37.1"
+		"xo": "^0.56.0"
 	},
 	"peerDependencies": {
 		"gulp": ">=4"

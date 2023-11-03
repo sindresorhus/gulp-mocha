@@ -1,8 +1,8 @@
-'use strict';
-const gulp = require('gulp');
-const mocha = require('./index.js');
+import gulp from 'gulp';
+import mocha from './index.js';
 
-exports.default = () => (
-	gulp.src('test/fixtures/fixture-pass.js', {read: false})
-		.pipe(mocha())
-);
+export default function main() {
+	return gulp.src('test/fixtures/fixture-pass.js', {read: false})
+		.pipe(mocha());
+}
+

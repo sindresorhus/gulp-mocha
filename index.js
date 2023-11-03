@@ -1,58 +1,57 @@
-'use strict';
-const dargs = require('dargs');
-const execa = require('execa');
-const PluginError = require('plugin-error');
-const supportsColor = require('supports-color');
-const through = require('through2');
-const utils = require('./utils.js');
+import process from 'node:process';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+import dargs from 'dargs';
+import {execa} from 'execa';
+import supportsColor from 'supports-color';
+import {gulpPlugin} from 'gulp-plugin-extras';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Mocha options that can be specified multiple times
-const MULTIPLE_OPTS = new Set([
-	'require'
+const MULTIPLE_OPTIONS = new Set([
+	'require',
 ]);
 
-module.exports = options => {
+function convertObjectToList(object) {
+	return Object.entries(object)
+		.map(([key, value]) => `${key}=${value}`)
+		.join(',');
+}
+
+export default function gulpMocha(options) {
 	options = {
 		colors: Boolean(supportsColor.stdout),
 		suppress: false,
-		...options
+		...options,
 	};
 
 	for (const [key, value] of Object.entries(options)) {
 		if (Array.isArray(value)) {
-			if (!MULTIPLE_OPTS.has(key)) {
+			if (!MULTIPLE_OPTIONS.has(key)) {
 				// Convert arrays into comma separated lists
 				options[key] = value.join(',');
 			}
 		} else if (typeof value === 'object') {
 			// Convert an object into comma separated list
-			options[key] = utils.convertObjectToList(value);
+			options[key] = convertObjectToList(value);
 		}
 	}
 
-	const args = dargs(options, {
+	const arguments_ = dargs(options, {
 		excludes: ['suppress'],
-		ignoreFalse: true
+		ignoreFalse: true,
 	});
 
 	const files = [];
 
-	function aggregate(file, encoding, done) {
-		if (file.isStream()) {
-			done(new PluginError('gulp-mocha', 'Streaming not supported'));
-			return;
-		}
-
+	return gulpPlugin('gulp-mocha', file => {
 		files.push(file.path);
-
-		done();
-	}
-
-	function flush(done) {
-		(async () => {
-			const subprocess = execa('mocha', files.concat(args), {
+	}, {
+		async * onFinish(stream) { // eslint-disable-line require-yield
+			const subprocess = execa('mocha', [...files, ...arguments_], {
 				localDir: __dirname,
-				preferLocal: true
+				preferLocal: true,
 			});
 
 			if (!options.suppress) {
@@ -62,14 +61,16 @@ module.exports = options => {
 
 			try {
 				const result = await subprocess;
-				this.emit('_result', result);
+				stream.emit('_result', result);
 			} catch (error) {
-				this.emit('error', new PluginError('gulp-mocha', error.exitCode > 0 ? 'There were test failures' : error));
+				if (error.exitCode > 0) {
+					const error = new Error('There were test failures');
+					error.isPresentable = true;
+					throw error;
+				}
+
+				throw error;
 			}
-
-			done();
-		})();
-	}
-
-	return through.obj(aggregate, flush);
-};
+		},
+	});
+}

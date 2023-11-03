@@ -1,5 +1,4 @@
-'use strict';
-const assert = require('assert');
+import assert from 'node:assert';
 
 it('contains syntax errors', () => {
 	assert false;
