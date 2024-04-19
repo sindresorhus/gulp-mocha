@@ -48,6 +48,7 @@ export default function gulpMocha(options) {
 	return gulpPlugin('gulp-mocha', file => {
 		files.push(file.path);
 	}, {
+		supportsAnyType: true,
 		async * onFinish(stream) { // eslint-disable-line require-yield
 			const subprocess = execa('mocha', [...files, ...arguments_], {
 				localDir: __dirname,
